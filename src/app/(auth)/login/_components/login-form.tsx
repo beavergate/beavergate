@@ -2,9 +2,9 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { Button } from "@ui/button";
-import { Form } from "@ui/form";
-import { InputForm } from "@ui/input/input-form";
+import { Button } from "@/ui/button";
+import { Form } from "@/ui/form";
+import { InputForm } from "@/ui/input/input-form";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";

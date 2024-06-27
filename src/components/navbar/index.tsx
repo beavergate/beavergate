@@ -1,11 +1,11 @@
 import React from "react";
 import { ModeToggle } from "./mode-toggle";
-import { Button } from "@ui/button";
+import { Button } from "@/ui/button";
 import Link from "next/link";
 import {
   supabaseServerAction,
   supabaseServerComponent,
-} from "@lib/supabase-server";
+} from "@/lib/supabase-server";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,7 +13,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@ui/dropdown-menu";
+} from "@/ui/dropdown-menu";
 import { Lock, User } from "lucide-react";
 import { revalidatePath } from "next/cache";
 

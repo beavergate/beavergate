@@ -1,11 +1,12 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
-import { ThemeProvider } from "@components/theme-provider";
-import { cn } from "@utils/cn";
-import { siteConfig } from "@config/site";
+import { ThemeProvider } from "@/components/theme-provider";
+import { cn } from "@/utils/cn";
+import { siteConfig } from "@/config/site";
 import { Toaster } from "react-hot-toast";
 
 import "./globals.css";
+import ClientSessionProvider from "@/components/ClientSessionProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -78,15 +79,16 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={cn(inter.className)}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
-
+        <ClientSessionProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </ClientSessionProvider>
         <Toaster position="top-center" reverseOrder={false} />
       </body>
     </html>

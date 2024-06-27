@@ -12,5 +12,7 @@ const ddb = new DynamoDB({
 
 // Set DynamoDB instance for Dynamoose
 dynamoose.aws.ddb.set(ddb);
+const dynamoClient = ddb;
+export { dynamoClient };
 
 export default dynamoose;

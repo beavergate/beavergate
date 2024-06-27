@@ -1,4 +1,4 @@
-import { supabaseServerComponent } from "@lib/supabase-server";
+import { supabaseServerComponent } from "@/lib/supabase-server";
 import React from "react";
 
 const ProfilePage = async () => {

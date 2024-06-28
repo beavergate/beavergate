@@ -40,4 +40,11 @@ const authOptions: AuthOptions = {
   },
 };
 
-export default NextAuth(authOptions);
+const handler = NextAuth(authOptions);
+
+// Handle each HTTP method
+export const GET = handler;
+export const POST = handler;
+
+
+export default handler

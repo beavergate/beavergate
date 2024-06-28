@@ -1,10 +1,10 @@
-import InputPopover from "@/components/InputPopover";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import axios from "axios";
 import BaseGoogleMap from "./components/GoogleMap";
 import { Location } from "./components/GoogleMap/BaseGoogleMap";
-import axios from "axios";
+import InputPopover from "@/components/InputPopover";
 
-const locations: Location[] = [
+const initialLocations: Location[] = [
   {
     id: 1,
     name: "Location 1",
@@ -42,9 +42,10 @@ const locations: Location[] = [
   },
 ];
 
-const Map = () => {
+const Map: React.FC = () => {
   const [locations, setLocations] = useState<Location[]>([]);
-  console.log("locations", locations);
+  const [locationsCoords, setLocationsCoords] = useState<Location[]>([]);
+
   const fetchCoordinates = async () => {
     try {
       const addresses = locations.map((location) => location.address);
@@ -63,7 +64,7 @@ const Map = () => {
           return location;
         });
 
-        setLocations(updatedLocations);
+        setLocationsCoords(updatedLocations);
       } else {
         console.error("Error fetching coordinates:", data.error);
       }
@@ -80,10 +81,14 @@ const Map = () => {
 
   return (
     <div>
-      <InputPopover
-        handleJsonData={(data) => setLocations(data as Location[])}
-      />
-      <BaseGoogleMap locations={locations} />
+      <div className="absolute z-10 m-10">
+        <InputPopover
+          handleJsonData={(data) => setLocations(data as Location[])}
+        />
+      </div>
+      <div className="h-[calc(100vh_-88px)] w-[100%]">
+        <BaseGoogleMap locations={locationsCoords} />
+      </div>
     </div>
   );
 };

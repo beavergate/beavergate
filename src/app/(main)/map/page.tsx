@@ -5,7 +5,7 @@ import MapModule from "modules/Map";
 
 const Map = () => {
   return (
-    <div className="space-y-3">
+    <div>
       <MapModule />
     </div>
   );

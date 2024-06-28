@@ -50,6 +50,9 @@
       "@/services/*": [
         "services/*"
       ],
+      "@/context/*": [
+        "context/*"
+      ],
       "types/*": [
         "types/*"
       ]

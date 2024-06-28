@@ -7,6 +7,7 @@ import { Toaster } from "react-hot-toast";
 
 import "./globals.css";
 import ClientSessionProvider from "@/components/ClientSessionProvider";
+import { GlobalStateProvider } from "@/context/GlobalStateContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -79,16 +80,18 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={cn(inter.className)}>
-        <ClientSessionProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
-        </ClientSessionProvider>
+        <GlobalStateProvider>
+          <ClientSessionProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+            </ThemeProvider>
+          </ClientSessionProvider>
+        </GlobalStateProvider>
         <Toaster position="top-center" reverseOrder={false} />
       </body>
     </html>

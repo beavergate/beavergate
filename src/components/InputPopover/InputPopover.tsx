@@ -5,9 +5,6 @@ import { Button } from "@/ui/button";
 import Papa from "papaparse";
 import * as XLSX from "xlsx";
 
-
-
-
 const InputPopover: React.FC = () => {
   const [files, setFiles] = useState<File[]>([]);
   const [jsonData, setJsonData] = useState<any[]>([]);
@@ -19,9 +16,9 @@ const InputPopover: React.FC = () => {
   useEffect(() => {
     if (files.length) {
       const file = files[0];
-      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+      const fileExtension = file.name.split(".").pop()?.toLowerCase();
 
-      if (fileExtension === 'csv') {
+      if (fileExtension === "csv") {
         Papa.parse(file, {
           header: true,
           complete: (result) => {
@@ -32,11 +29,11 @@ const InputPopover: React.FC = () => {
             console.error("Error parsing CSV:", error);
           },
         });
-      } else if (fileExtension === 'xlsx' || fileExtension === 'xls') {
+      } else if (fileExtension === "xlsx" || fileExtension === "xls") {
         const reader = new FileReader();
         reader.onload = (event) => {
           const data = new Uint8Array(event.target?.result as ArrayBuffer);
-          const workbook = XLSX.read(data, { type: 'array' });
+          const workbook = XLSX.read(data, { type: "array" });
           const sheetName = workbook.SheetNames[0];
           const worksheet = workbook.Sheets[sheetName];
           const json = XLSX.utils.sheet_to_json(worksheet);

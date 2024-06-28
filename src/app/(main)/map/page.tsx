@@ -1,9 +1,12 @@
-import React from "react";
+"use client"
 
-const Map = async () => {
+import React from "react";
+import MapModule from "modules/Map";
+
+const Map = () => {
   return (
     <div className="space-y-3">
-      <h3>map</h3>
+      <MapModule />
     </div>
   );
 };

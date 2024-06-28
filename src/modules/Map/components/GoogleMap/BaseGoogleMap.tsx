@@ -2,7 +2,7 @@
 
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 
 const containerStyle = {
@@ -21,7 +21,7 @@ const locations = [
     id: 1,
     name: "Location 1",
     address: "123 Main St",
-    lat: -3.745,
+    lat: -3.845,
     lng: -38.523,
   },
   {
@@ -41,17 +41,31 @@ const locations = [
 ];
 
 const BaseGoogleMap: React.FC = () => {
+  const [map, setMap] = useState();
   return (
     <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}>
-      <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={10}>
+      <GoogleMap
+        mapContainerStyle={containerStyle}
+        center={center}
+        zoom={10}
+        options={{
+          streetViewControl: false,
+          fullscreenControl: false,
+          mapTypeControl: false,
+        }}
+        onLoad={(map: any) => {
+          setMap(map);
+        }}
+      >
         {/* Child components, such as markers, info windows, etc. */}
-        {locations.map((location) => (
-          <Marker
-            key={location.id}
-            position={{ lat: location.lat, lng: location.lng }}
-            title={location.name}
-          />
-        ))}
+        {map &&
+          locations.map((location) => (
+            <Marker
+              key={location.id}
+              position={{ lat: location.lat, lng: location.lng }}
+              title={location.name}
+            />
+          ))}
       </GoogleMap>
     </LoadScript>
   );

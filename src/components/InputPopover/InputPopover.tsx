@@ -5,9 +5,12 @@ import { Button } from "@/ui/button";
 import Papa from "papaparse";
 import * as XLSX from "xlsx";
 
-const InputPopover: React.FC = () => {
+interface InputPopoverProps {
+  handleJsonData: (data: any[]) => void;
+}
+
+const InputPopover: React.FC<InputPopoverProps> = ({ handleJsonData }) => {
   const [files, setFiles] = useState<File[]>([]);
-  const [jsonData, setJsonData] = useState<any[]>([]);
   const uploadComponentRef = useRef<UploadDialogHandle>(null);
 
   if (files.length) {
@@ -22,7 +25,7 @@ const InputPopover: React.FC = () => {
         Papa.parse(file, {
           header: true,
           complete: (result) => {
-            setJsonData(result.data);
+            handleJsonData(result.data);
             uploadComponentRef.current?.close();
           },
           error: (error: Error) => {
@@ -37,7 +40,7 @@ const InputPopover: React.FC = () => {
           const sheetName = workbook.SheetNames[0];
           const worksheet = workbook.Sheets[sheetName];
           const json = XLSX.utils.sheet_to_json(worksheet);
-          setJsonData(json);
+          handleJsonData(json);
           uploadComponentRef.current?.close();
         };
         reader.readAsArrayBuffer(file);
@@ -49,7 +52,7 @@ const InputPopover: React.FC = () => {
 
   const handleFileRemove = () => {
     setFiles([]);
-    setJsonData([]);
+    handleJsonData([]);
   };
 
   return (

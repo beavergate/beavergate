@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'At least one address parameter is required' }, { status: 400 });
   }
 
-  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_PALCES_API_KEY; // Corrected API key name
   if (!apiKey) {
     return NextResponse.json({ error: 'Google Maps API key not configured' }, { status: 500 });
   }

@@ -1,9 +1,22 @@
-// src/components/MapWithMarkers.tsx
+// src/components/MapComponent.tsx
 
 "use client";
 
-import React, { useState } from "react";
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import React, { useEffect, useState } from "react";
+import { GoogleMap, LoadScript } from "@react-google-maps/api";
+import BaseMarker from "./BaseMarker/BaseMarker";
+
+export interface Location {
+  id: number;
+  name: string;
+  address: string;
+  lat: number;
+  lng: number;
+}
+
+interface MapComponentProps {
+  locations: Location[];
+}
 
 const containerStyle = {
   width: "100%",
@@ -15,33 +28,19 @@ const center = {
   lng: -38.523,
 };
 
-// Dummy data
-const locations = [
-  {
-    id: 1,
-    name: "Location 1",
-    address: "123 Main St",
-    lat: -3.845,
-    lng: -38.523,
-  },
-  {
-    id: 2,
-    name: "Location 2",
-    address: "456 Elm St",
-    lat: -3.745,
-    lng: -38.528,
-  },
-  {
-    id: 3,
-    name: "Location 3",
-    address: "789 Oak St",
-    lat: -3.75,
-    lng: -38.523,
-  },
-];
+const BaseGoogleMap: React.FC<MapComponentProps> = ({ locations }) => {
+  const [map, setMap] = useState<google.maps.Map | null>(null);
 
-const BaseGoogleMap: React.FC = () => {
-  const [map, setMap] = useState();
+  useEffect(() => {
+    if (map && locations.length > 0) {
+      const bounds = new google.maps.LatLngBounds();
+      locations.forEach((location) => {
+        bounds.extend(new google.maps.LatLng(location.lat, location.lng));
+      });
+      map.fitBounds(bounds);
+    }
+  }, [map, locations]);
+
   return (
     <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}>
       <GoogleMap
@@ -53,17 +52,15 @@ const BaseGoogleMap: React.FC = () => {
           fullscreenControl: false,
           mapTypeControl: false,
         }}
-        onLoad={(map: any) => {
-          setMap(map);
-        }}
+        onLoad={(map) => setMap(map)}
       >
-        {/* Child components, such as markers, info windows, etc. */}
         {map &&
           locations.map((location) => (
-            <Marker
+            <BaseMarker
               key={location.id}
+              id={location.id}
+              name={location.name}
               position={{ lat: location.lat, lng: location.lng }}
-              title={location.name}
             />
           ))}
       </GoogleMap>

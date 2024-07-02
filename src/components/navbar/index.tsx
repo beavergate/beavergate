@@ -35,12 +35,10 @@ const Navbar = async () => {
       <div className="container p-4 sm:p-6 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
           <Lock />
-          <h5 className="mt-0.5">Property Managment</h5>
+          <h5 className="mt-0.5">BeaverGate</h5>
         </Link>
 
         <div className="flex items-center gap-3">
-       
-
           <ModeToggle />
         </div>
       </div>

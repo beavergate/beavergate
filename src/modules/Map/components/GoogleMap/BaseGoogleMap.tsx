@@ -54,15 +54,20 @@ const BaseGoogleMap: React.FC<MapComponentProps> = ({ locations }) => {
         }}
         onLoad={(map) => setMap(map)}
       >
-        {map &&
-          locations.map((location) => (
+         {map &&
+        locations.map((location:any) => {
+          if (location?.error || !location.id) {
+            return null;
+          }
+          return (
             <BaseMarker
               key={location.id}
               id={location.id}
               name={location.name}
               position={{ lat: location.lat, lng: location.lng }}
             />
-          ))}
+          );
+        })}
       </GoogleMap>
     </LoadScript>
   );

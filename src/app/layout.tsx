@@ -8,6 +8,7 @@ import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import ClientSessionProvider from "@/components/ClientSessionProvider";
 import { GlobalStateProvider } from "@/context/GlobalStateContext";
+import { TooltipProvider } from "@/ui/tooltip";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -82,14 +83,16 @@ export default function RootLayout({
       <body className={cn(inter.className)}>
         <GlobalStateProvider>
           <ClientSessionProvider>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
-              {children}
-            </ThemeProvider>
+            <TooltipProvider>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
+              >
+                {children}
+              </ThemeProvider>
+            </TooltipProvider>
           </ClientSessionProvider>
         </GlobalStateProvider>
         <Toaster position="top-center" reverseOrder={false} />

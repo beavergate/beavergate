@@ -1,9 +1,12 @@
-import React from "react";
+"use client";
 
-const Dashboard = async () => {
+import React from "react";
+import DashboardModule from "modules/Dashboard";
+
+const Dashboard = () => {
   return (
     <div className="space-y-3">
-      <h3>map</h3>
+      <DashboardModule />
     </div>
   );
 };

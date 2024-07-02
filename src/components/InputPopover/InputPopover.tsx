@@ -20,15 +20,22 @@ const InputPopover: React.FC<InputPopoverProps> = ({ handleJsonData }) => {
     if (files.length) {
       const file = files[0];
       const fileExtension = file.name.split(".").pop()?.toLowerCase();
-
+    
+      const removeEmptyValues = (data: any) => {
+        return data.filter((row: any) => {
+          return Object.values(row).some(value => value !== undefined && value?.toString().trim() !== "");
+        });
+      };
+    
       if (fileExtension === "csv") {
         Papa.parse(file, {
           header: true,
           complete: (result) => {
-            handleJsonData(result.data);
+            const cleanedData = removeEmptyValues(result.data);
+            handleJsonData(cleanedData);
             uploadComponentRef.current?.close();
           },
-          error: (error: Error) => {
+          error: (error) => {
             console.error("Error parsing CSV:", error);
           },
         });
@@ -40,7 +47,8 @@ const InputPopover: React.FC<InputPopoverProps> = ({ handleJsonData }) => {
           const sheetName = workbook.SheetNames[0];
           const worksheet = workbook.Sheets[sheetName];
           const json = XLSX.utils.sheet_to_json(worksheet);
-          handleJsonData(json);
+          const cleanedData = removeEmptyValues(json);
+          handleJsonData(cleanedData);
           uploadComponentRef.current?.close();
         };
         reader.readAsArrayBuffer(file);
@@ -48,6 +56,7 @@ const InputPopover: React.FC<InputPopoverProps> = ({ handleJsonData }) => {
         console.error("Unsupported file format");
       }
     }
+    
   }, [files]);
 
   const handleFileRemove = () => {

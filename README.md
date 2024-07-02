@@ -1,6 +1,6 @@
 # Next Level Auth
 
-Next.js 14 Supabase Authentication Playground
+Next.js 14 
 
 ## About
 
@@ -12,8 +12,6 @@ Every line of code is open source, offering a collaborative learning experience.
 
 - Nextjs 14 (latest)
 - App router
-- Supabase
-- Supabase with Authentication
 - Dark, Light and System - Color theme mode
 - SEO Optimized
 - Styled using **Tailwind CSS**

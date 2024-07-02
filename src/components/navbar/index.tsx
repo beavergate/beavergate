@@ -1,32 +1,13 @@
 import React from "react";
 import { ModeToggle } from "./mode-toggle";
-import { Button } from "@/ui/button";
 import Link from "next/link";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/ui/dropdown-menu";
-import { Lock, User } from "lucide-react";
+import { Lock } from "lucide-react";
 import { revalidatePath } from "next/cache";
 
 const Navbar = async () => {
-  // const supabase = supabaseServerComponent();
-
-  // const {
-  //   data: { user },
-  // } = await supabase.auth.getUser();
 
   async function signOut() {
-    "use server";
-
-    // const supabase = supabaseServerAction();
-    // await supabase.auth.signOut();
-
     revalidatePath("/");
   }
 

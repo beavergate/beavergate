@@ -3,6 +3,7 @@ import Table from "@/components/Table";
 import { Property } from "./components/types";
 import getColumns from "./components/DataTableColumns";
 import { customHeader } from "./components/CustomHeader";
+import { ColumnDef } from "@tanstack/react-table";
 
 const properties: Property[] = [
   {
@@ -23,11 +24,7 @@ const properties: Property[] = [
 
 const Dashboard: React.FC = () => {
   const [selectedProperties, setSelectedProperties] = useState<Property[]>([]);
-  const columns = getColumns(setSelectedProperties);
-
-  console.log('selectedProperties', selectedProperties)
-
- 
+  const columns = getColumns(setSelectedProperties) as ColumnDef<object, any>[];
 
   return (
     <div className="container mx-auto p-4">

@@ -1,27 +1,31 @@
-import dynamoose from "../lib/dynamoose";
+import mongoose from "mongoose"
 
-const UserSchema = new dynamoose.Schema(
-  {
-    userId: {
-      type: String,
-      hashKey: true,
-    },
-    name: String,
-    email: String,
-    createdAt: {
-      type: Date,
-      default: () => new Date(),
-    },
-    updatedAt: {
-      type: Date,
-      default: () => new Date(),
-    },
+const userSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true
   },
-  {
-    timestamps: true,
+  email: {
+    type: String,
+    unique: true,
+    required: true
+  },
+  password: {
+    type: String
+  },
+  image: {
+    type: String
+  },
+  role: {
+    type: String,
+    default: "user"
+  },
+  provider: {
+    type: String,
+    default: "credentials"
   }
-);
+}, { timestamps: true })
 
-const User = dynamoose.model("User", UserSchema);
+const User = mongoose.models.User || mongoose.model("User", userSchema)
 
-export default User;
+export default User

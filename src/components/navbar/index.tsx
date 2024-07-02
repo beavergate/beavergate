@@ -24,8 +24,8 @@ const Navbar = async () => {
           <h5 className="mt-0.5">BeaverGate</h5>
         </Link>
 
-        {/* <div className="flex items-center gap-3">
-          {user ? (
+        <div className="flex items-center gap-3">
+          {/* {user ? (
             <>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -68,10 +68,10 @@ const Navbar = async () => {
                 <Link href="/login">Login</Link>
               </Button>
             </>
-          )}
+          )} */}
 
           <ModeToggle />
-        </div> */}
+        </div>
       </div>
     </header>
   );

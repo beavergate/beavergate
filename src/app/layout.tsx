@@ -10,7 +10,10 @@ import ClientSessionProvider from "@/components/ClientSessionProvider";
 import { GlobalStateProvider } from "@/context/GlobalStateContext";
 import { TooltipProvider } from "@/ui/tooltip";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+})
 
 export const viewport: Viewport = {
   themeColor: [
@@ -63,7 +66,7 @@ export const metadata: Metadata = {
     shortcut: "/favicon-16x16.png",
     apple: "/apple-touch-icon.png",
   },
-  manifest: `${siteConfig.url}/site.webmanifest`,
+  // manifest: `${siteConfig.url}/site.webmanifest`,
   robots: {
     index: true,
     follow: true,
@@ -80,7 +83,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn(inter.className)}>
+      <body className={cn(inter.className, "bg-background-0")}>
         <GlobalStateProvider>
           <ClientSessionProvider>
             <TooltipProvider>

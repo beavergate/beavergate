@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
+import { IProperty } from "./Property"; // Ensure the path is correct
 
 export type ILandlord = Document & {
   name: string;
@@ -15,6 +16,7 @@ export type ILandlord = Document & {
   aadhaar_card_attachment?: string;
   cancelled_cheque_attachment?: string;
   vendor_code?: string;
+  property: IProperty["_id"]; 
 };
 
 const landlordSchema: Schema = new mongoose.Schema(
@@ -61,6 +63,10 @@ const landlordSchema: Schema = new mongoose.Schema(
     },
     vendor_code: {
       type: String,
+    },
+    property: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Property",
     },
   },
   {

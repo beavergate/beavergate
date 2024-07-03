@@ -1,7 +1,12 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 import { IUser } from "./User"; // Make sure the path is correct
+import { ILandlord } from "./Landlord"; // Make sure the path is correct
+import { ICommercial } from "./Commercial"; // Make sure the path is correct
+import { ICompliance } from "./Compliance"; // Make sure the path is correct
+import { IUtility } from "./Utility"; // Make sure the path is correct
+import { ITag } from "./Tag"; // Make sure the path is correct
 
-type IProperty = Document & {
+export type IProperty = Document & {
   status: string;
   photos?: string[];
   name: string;
@@ -14,19 +19,23 @@ type IProperty = Document & {
   state: string;
   cost_centre?: string;
   user: IUser["_id"];
+  landlords: ILandlord["_id"][];
+  commercial: ICommercial["_id"];
+  compliance: ICompliance["_id"];
+  utilities: IUtility["_id"][];
+  tags: ITag["_id"][];
 };
 
 const propertySchema: Schema = new mongoose.Schema(
   {
     status: {
       type: String,
-      enum: ["Active", "Inactive", "Pending", "Sold"], // Example statuses
+      enum: ["Active", "Inactive"], // Example statuses
       default: "Active",
     },
     photos: {
       type: [String],
     },
-
     name: {
       type: String,
       required: true,
@@ -73,6 +82,35 @@ const propertySchema: Schema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    landlords: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Landlord",
+        required: true,
+      }
+    ],
+    commercial: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Commercial",
+      required: true,
+    },
+    compliance: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Compliance",
+      required: true,
+    },
+    utilities: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Utility",
+      }
+    ],
+    tags: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Tag",
+      }
+    ],
   },
   {
     timestamps: true,

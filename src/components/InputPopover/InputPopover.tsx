@@ -1,9 +1,9 @@
-import UploadDialog from "@/components/UploadDialog";
 import React, { useEffect, useRef, useState } from "react";
+import UploadDialog from "@/components/UploadDialog";
 import { UploadDialogHandle } from "../UploadDialog/types";
 import { Button } from "@/ui/button";
-import Papa from "papaparse";
-import * as XLSX from "xlsx";
+import { parseCSV, parseExcel } from "@/helpers/fileParsers";
+import { removeEmptyValues } from "@/helpers/dataCleaners";
 
 interface InputPopoverProps {
   handleJsonData: (data: any[]) => void;
@@ -13,51 +13,26 @@ const InputPopover: React.FC<InputPopoverProps> = ({ handleJsonData }) => {
   const [files, setFiles] = useState<File[]>([]);
   const uploadComponentRef = useRef<UploadDialogHandle>(null);
 
-  if (files.length) {
-    uploadComponentRef.current?.close();
-  }
   useEffect(() => {
     if (files.length) {
       const file = files[0];
       const fileExtension = file.name.split(".").pop()?.toLowerCase();
-    
-      const removeEmptyValues = (data: any) => {
-        return data.filter((row: any) => {
-          return Object.values(row).some(value => value !== undefined && value?.toString().trim() !== "");
-        });
+
+      const handleFileLoad = (data: any[]) => {
+        const cleanedData = removeEmptyValues(data);
+        handleJsonData(cleanedData);
+        uploadComponentRef.current?.close();
       };
-    
+
       if (fileExtension === "csv") {
-        Papa.parse(file, {
-          header: true,
-          complete: (result) => {
-            const cleanedData = removeEmptyValues(result.data);
-            handleJsonData(cleanedData);
-            uploadComponentRef.current?.close();
-          },
-          error: (error) => {
-            console.error("Error parsing CSV:", error);
-          },
-        });
+        parseCSV(file, handleFileLoad);
       } else if (fileExtension === "xlsx" || fileExtension === "xls") {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          const data = new Uint8Array(event.target?.result as ArrayBuffer);
-          const workbook = XLSX.read(data, { type: "array" });
-          const sheetName = workbook.SheetNames[0];
-          const worksheet = workbook.Sheets[sheetName];
-          const json = XLSX.utils.sheet_to_json(worksheet);
-          const cleanedData = removeEmptyValues(json);
-          handleJsonData(cleanedData);
-          uploadComponentRef.current?.close();
-        };
-        reader.readAsArrayBuffer(file);
+        parseExcel(file, handleFileLoad);
       } else {
         console.error("Unsupported file format");
       }
     }
-    
-  }, [files]);
+  }, [files, handleJsonData]);
 
   const handleFileRemove = () => {
     setFiles([]);
@@ -71,12 +46,10 @@ const InputPopover: React.FC<InputPopoverProps> = ({ handleJsonData }) => {
         files={files}
         setFiles={setFiles}
       />
-
       <div className="max-w-sm p-4 bg-white shadow-md rounded-md h-[300px] w-[300px]">
         <div className="flex items-center mb-4">
           <span className="mr-auto text-gray-700">Import</span>
         </div>
-
         {files.length ? (
           <div className="flex flex-col items-center justify-center h-full">
             <p className="mb-2 text-gray-700">{files[0]?.name}</p>

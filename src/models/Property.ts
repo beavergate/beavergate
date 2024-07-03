@@ -1,10 +1,10 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
-import { IUser } from "./User"; // Make sure the path is correct
-import { ILandlord } from "./Landlord"; // Make sure the path is correct
-import { ICommercial } from "./Commercial"; // Make sure the path is correct
-import { ICompliance } from "./Compliance"; // Make sure the path is correct
-import { IUtility } from "./Utility"; // Make sure the path is correct
-import { ITag } from "./Tag"; // Make sure the path is correct
+import { IUser } from "./User";
+import { ILandlord } from "./Landlord";
+import { ICommercial } from "./Commercial";
+import { ICompliance } from "./Compliance";
+import { IUtility } from "./Utility";
+import { ITag } from "./Tag";
 
 export type IProperty = Document & {
   status: string;
@@ -22,7 +22,7 @@ export type IProperty = Document & {
   landlords: ILandlord["_id"][];
   commercial: ICommercial["_id"];
   compliance: ICompliance["_id"];
-  utilities: IUtility["_id"][];
+  utility: IUtility["_id"];
   tags: ITag["_id"][];
 };
 
@@ -77,17 +77,12 @@ const propertySchema: Schema = new mongoose.Schema(
     cost_centre: {
       type: String,
     },
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
     landlords: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Landlord",
         required: true,
-      }
+      },
     ],
     commercial: {
       type: mongoose.Schema.Types.ObjectId,
@@ -99,18 +94,18 @@ const propertySchema: Schema = new mongoose.Schema(
       ref: "Compliance",
       required: true,
     },
-    utilities: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Utility",
-      }
-    ],
-    tags: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Tag",
-      }
-    ],
+    utility: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Utility",
+    },
+    tags: {
+      type: [String],
+    },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
   },
   {
     timestamps: true,

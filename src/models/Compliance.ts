@@ -1,10 +1,12 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
+import { IProperty } from "./Property"; // Ensure the path is correct
 
 export type ICompliance = Document & {
   fire?: boolean;
   shops_and_establishment?: boolean;
   title_clearance?: boolean;
   sanction_plan_occupancy_certificate?: boolean;
+  property: IProperty["_id"]; 
 };
 
 const complianceSchema: Schema = new mongoose.Schema(
@@ -24,6 +26,10 @@ const complianceSchema: Schema = new mongoose.Schema(
     sanction_plan_occupancy_certificate: {
       type: Boolean,
       default: false,
+    },
+    property: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Property",
     },
   },
   {

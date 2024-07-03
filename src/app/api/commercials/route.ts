@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import connectToDatabase from "../../../lib/mongodb";
-import User from "@/models/User";
+import connectToDatabase from "@/lib/mongodb";
+import Commercial from "@/models/Commercial";
 
+// GET /api/commercials
 export async function GET() {
   try {
     await connectToDatabase();
-    const users = await User.find({});
-    return NextResponse.json({ success: true, data: users });
+    const commercials = await Commercial.find({});
+    return NextResponse.json({ success: true, data: commercials });
   } catch (error: any) {
     return NextResponse.json(
       { success: false, message: error.message },
@@ -15,12 +16,16 @@ export async function GET() {
   }
 }
 
+// POST /api/commercials
 export async function POST(req: NextRequest) {
   try {
     await connectToDatabase();
     const data = await req.json();
-    const user = await User.create(data);
-    return NextResponse.json({ success: true, data: user }, { status: 201 });
+    const commercial = await Commercial.create(data);
+    return NextResponse.json(
+      { success: true, data: commercial },
+      { status: 201 }
+    );
   } catch (error: any) {
     return NextResponse.json(
       { success: false, message: error.message },

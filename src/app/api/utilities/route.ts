@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import connectToDatabase from "@/lib/mongodb";
-import Property from "@/models/Property";
+import Utility from "@/models/Utility";
 
-// GET /api/properties
+// GET /api/utilities
 export async function GET() {
   try {
     await connectToDatabase();
-    const properties = await Property.find({});
-    return NextResponse.json({ success: true, data: properties });
+    const utilities = await Utility.find({});
+    return NextResponse.json({ success: true, data: utilities });
   } catch (error: any) {
     return NextResponse.json(
       { success: false, message: error.message },
@@ -16,16 +16,13 @@ export async function GET() {
   }
 }
 
-// POST /api/properties
+// POST /api/utilities
 export async function POST(req: NextRequest) {
   try {
     await connectToDatabase();
     const data = await req.json();
-    const property = await Property.create(data);
-    return NextResponse.json(
-      { success: true, data: property },
-      { status: 201 }
-    );
+    const utility = await Utility.create(data);
+    return NextResponse.json({ success: true, data: utility }, { status: 201 });
   } catch (error: any) {
     return NextResponse.json(
       { success: false, message: error.message },

@@ -1,10 +1,10 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
-import { IUser } from "./User"; 
-import { ILandlord } from "./Landlord"; 
-import { ICommercial } from "./Commercial"; 
-import { ICompliance } from "./Compliance"; 
-import { IUtility } from "./Utility"; 
-import { ITag } from "./Tag"; 
+import { IUser } from "./User";
+import { ILandlord } from "./Landlord";
+import { ICommercial } from "./Commercial";
+import { ICompliance } from "./Compliance";
+import { IUtility } from "./Utility";
+import { ITag } from "./Tag";
 
 export type IProperty = Document & {
   status: string;
@@ -98,12 +98,9 @@ const propertySchema: Schema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Utility",
     },
-    tags: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Tag",
-      },
-    ],
+    tags: {
+      type: [String],
+    },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

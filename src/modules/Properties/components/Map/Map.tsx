@@ -81,11 +81,6 @@ const Map: React.FC = () => {
 
   return (
     <div>
-      <div className="absolute z-10 m-10">
-        <InputPopover
-          handleJsonData={(data) => setLocations(data as Location[])}
-        />
-      </div>
       <div className="h-[calc(100vh_-88px)] w-[100%]">
         <BaseGoogleMap locations={locationsCoords} />
       </div>

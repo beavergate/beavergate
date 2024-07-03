@@ -11,9 +11,9 @@ import { GlobalStateProvider } from "@/context/GlobalStateContext";
 import { TooltipProvider } from "@/ui/tooltip";
 
 const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-})
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export const viewport: Viewport = {
   themeColor: [
@@ -76,6 +76,7 @@ export const metadata: Metadata = {
     },
   },
 };
+
 export default function RootLayout({
   children,
 }: Readonly<{

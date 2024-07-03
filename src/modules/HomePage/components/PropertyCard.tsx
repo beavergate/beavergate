@@ -1,6 +1,7 @@
 // components/PropertyCard.tsx
 import { FC } from "react";
 import { Building, Building2, ChevronRight } from "lucide-react";
+import Link from "next/link";
 
 const PropertyCard: FC = () => {
   return (
@@ -13,10 +14,10 @@ const PropertyCard: FC = () => {
             <h6 className="text-[16px] text-gray-600">Properties</h6>
           </div>
         </div>
-        <a href="#" className="text-purple-0 text-[14px] font-semibold flex justify-center">
+        <Link href="/properties" className="text-purple-0 text-[14px] font-semibold flex justify-center">
           <p className="text-purple-0">See all properties</p>
           <ChevronRight size={22} className="text-purple-0" />
-        </a>
+        </Link>
       </div>
       <div className="flex justify-between items-center mt-4 p-4 rounded-[8px] mx-auto bg-[#F0F3F9]">
         <div className="text-center">

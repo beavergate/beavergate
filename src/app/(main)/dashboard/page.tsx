@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import DashboardModule from "modules/Dashboard";
+import DashboardModule from "modules/Properties";
 
 const Dashboard = () => {
   return (

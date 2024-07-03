@@ -32,7 +32,7 @@ const InputPopover: React.FC<InputPopoverProps> = ({ handleJsonData }) => {
         console.error("Unsupported file format");
       }
     }
-  }, [files, handleJsonData]);
+  }, [files]);
 
   const handleFileRemove = () => {
     setFiles([]);

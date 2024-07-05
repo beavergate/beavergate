@@ -1,4 +1,10 @@
-import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import UploadDialog from "@/components/UploadDialog";
 import { UploadDialogHandle } from "../UploadDialog/types";
 import { Button } from "@/ui/button";
@@ -6,11 +12,15 @@ import { parseFile } from "@/helpers/fileParsers";
 
 interface InputPopoverProps {
   handleJsonData: (data: any[]) => void;
-  files: File[],
+  files: File[];
   setFiles: Dispatch<SetStateAction<File[]>>;
 }
 
-const InputPopover: React.FC<InputPopoverProps> = ({ handleJsonData, files, setFiles }) => {
+const InputPopover: React.FC<InputPopoverProps> = ({
+  handleJsonData,
+  files,
+  setFiles,
+}) => {
   const uploadComponentRef = useRef<UploadDialogHandle>(null);
 
   useEffect(() => {
@@ -23,7 +33,7 @@ const InputPopover: React.FC<InputPopoverProps> = ({ handleJsonData, files, setF
         uploadComponentRef.current?.close();
       };
 
-      parseFile(file, handleFileLoad);
+      parseFile(file, handleFileLoad, "property");
     }
   }, [files]);
   const handleFileRemove = () => {

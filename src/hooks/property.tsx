@@ -4,19 +4,24 @@ import { useState } from "react";
 export const useCreateProperty = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const states = { loading, error };
 
-  const createGroup = async (data: any) => {
+  const createProperty = async (data: any) => {
     setLoading(true);
     setError(null);
-    const res = await callApi({
-      url: "/api/properties",
-      method: "POST",
-      data,
-    });
-    setLoading(false);
-    return res;
+    try {
+      const res = await callApi({
+        url: "/api/properties",
+        method: "POST",
+        data,
+      });
+      setLoading(false);
+      return res;
+    } catch (err: any) {
+      setError(err.message);
+      setLoading(false);
+      throw err;
+    }
   };
 
-  return [createGroup, states];
+  return [createProperty, { loading, error }] as const;
 };

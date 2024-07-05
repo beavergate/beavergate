@@ -5,8 +5,17 @@ import List from "./components/List";
 import Map from "./components/Map";
 import { Property } from "./types";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import InputPopover from "@/components/InputPopover";
+import { Location } from "./components/Map/components/GoogleMap/BaseGoogleMap";
 
 const Properties: React.FC = () => {
+  const [jsonData, setJsonData] = useState<Location[]>([]);
+  const [files, setFiles] = useState<File[]>([]);
+
+
+  const headers = jsonData[0];
+  const propertiesData = jsonData.slice(1)
+
   const properties: Property[] = [
     {
       id: "P001",
@@ -26,6 +35,11 @@ const Properties: React.FC = () => {
 
   return (
     <div className="container mx-auto p-4">
+      <InputPopover
+        setFiles={setFiles}
+        files={files}
+        handleJsonData={(data) => setJsonData(data as Location[])}
+      />
       <Tabs defaultValue="list">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="list">List View</TabsTrigger>
@@ -35,7 +49,7 @@ const Properties: React.FC = () => {
           <List data={properties} />
         </TabsContent>
         <TabsContent value="map">
-          <Map />
+          <Map locations={propertiesData} />
         </TabsContent>
       </Tabs>
     </div>

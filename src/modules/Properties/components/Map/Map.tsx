@@ -2,10 +2,12 @@ import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import BaseGoogleMap from "./components/GoogleMap";
 import { Location } from "./components/GoogleMap/BaseGoogleMap";
-import InputPopover from "@/components/InputPopover";
 
-const Map: React.FC = () => {
-  const [locations, setLocations] = useState<Location[]>([]);
+export type MapProps = {
+  locations: Location[]
+}
+
+const Map: React.FC<MapProps>= ({locations}) => {
   const [locationsCoords, setLocationsCoords] = useState<Location[]>([]);
 
   const fetchCoordinates = async () => {

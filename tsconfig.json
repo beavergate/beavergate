@@ -32,6 +32,9 @@
       "@/utils/*": [
         "utils/*"
       ],
+      "@/hooks/*": [
+        "hooks/*"
+      ],
       "@/ui/*": [
         "components/ui/*"
       ],

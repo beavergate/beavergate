@@ -11,10 +11,10 @@ export type IProperty = Document & {
   photos?: string[];
   name: string;
   address: string;
-  latitude: number;
-  longitude: number;
-  carpet_area: number;
-  super_built_up_area: number;
+  latitude: number | null;
+  longitude: number | null;
+  carpet_area: number | null;
+  super_built_up_area: number | null;
   pincode: string;
   state: string;
   cost_centre?: string;

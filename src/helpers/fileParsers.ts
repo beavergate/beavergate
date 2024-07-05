@@ -1,7 +1,9 @@
 import Papa from "papaparse";
-import * as XLSX from "xlsx";
+import * as XLSX from "xlsx"; 
+ 
+type FileParserCallback = (data: any[]) => void;
 
-export const parseCSV = (file: File, callback: (data: any[]) => void) => {
+const parseCSV = (file: File, callback: FileParserCallback) => {
   Papa.parse(file, {
     header: true,
     complete: (result) => {
@@ -13,7 +15,7 @@ export const parseCSV = (file: File, callback: (data: any[]) => void) => {
   });
 };
 
-export const parseExcel = (file: File, callback: (data: any[]) => void) => {
+const parseExcel = (file: File, callback: FileParserCallback) => {
   const reader = new FileReader();
   reader.onload = (event) => {
     const data = new Uint8Array(event.target?.result as ArrayBuffer);
@@ -24,4 +26,15 @@ export const parseExcel = (file: File, callback: (data: any[]) => void) => {
     callback(json);
   };
   reader.readAsArrayBuffer(file);
+};
+
+export const parseFile = (file: File, callback: FileParserCallback) => {
+  const fileExtension = file.name.split(".").pop()?.toLowerCase();
+  if (fileExtension === "csv") {
+    parseCSV(file, callback);
+  } else if (fileExtension === "xlsx" || fileExtension === "xls") {
+    parseExcel(file, callback);
+  } else {
+    console.error("Unsupported file format");
+  }
 };

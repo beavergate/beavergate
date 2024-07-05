@@ -2,8 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import UploadDialog from "@/components/UploadDialog";
 import { UploadDialogHandle } from "../UploadDialog/types";
 import { Button } from "@/ui/button";
-import { parseCSV, parseExcel } from "@/helpers/fileParsers";
-import { removeEmptyValues } from "@/helpers/dataCleaners";
+import { parseFile } from "@/helpers/fileParsers";
 
 interface InputPopoverProps {
   handleJsonData: (data: any[]) => void;
@@ -16,24 +15,16 @@ const InputPopover: React.FC<InputPopoverProps> = ({ handleJsonData }) => {
   useEffect(() => {
     if (files.length) {
       const file = files[0];
-      const fileExtension = file.name.split(".").pop()?.toLowerCase();
 
       const handleFileLoad = (data: any[]) => {
-        const cleanedData = removeEmptyValues(data);
-        handleJsonData(cleanedData);
+        // handleJsonData(data);
+        console.log("data", data);
         uploadComponentRef.current?.close();
       };
 
-      if (fileExtension === "csv") {
-        parseCSV(file, handleFileLoad);
-      } else if (fileExtension === "xlsx" || fileExtension === "xls") {
-        parseExcel(file, handleFileLoad);
-      } else {
-        console.error("Unsupported file format");
-      }
+      parseFile(file, handleFileLoad);
     }
   }, [files]);
-
   const handleFileRemove = () => {
     setFiles([]);
     handleJsonData([]);

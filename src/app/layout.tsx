@@ -90,7 +90,7 @@ export default function RootLayout({
             <TooltipProvider>
               <ThemeProvider
                 attribute="class"
-                defaultTheme="system"
+                defaultTheme="light"
                 enableSystem
                 disableTransitionOnChange
               >

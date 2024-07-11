@@ -3,42 +3,41 @@
 import React, { useState } from "react";
 import List from "./components/List";
 import Map from "./components/Map";
-import { Property } from "./types";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import InputPopover from "@/components/InputPopover";
 import { Location } from "./components/Map/components/GoogleMap/BaseGoogleMap";
 import { useCreateProperty } from "@/hooks/property";
+import { useGeocodeAddresses } from "@/hooks/geocode";
 
 const Properties: React.FC = () => {
   const [createProperty] = useCreateProperty();
   const [jsonData, setJsonData] = useState<Location[]>([]);
+  const [properties, setProperties] = useState<any>([]);
   const [files, setFiles] = useState<File[]>([]);
+  const [geocodeAddresses] = useGeocodeAddresses();
 
-  const headers = jsonData[0];
-  const propertiesData = jsonData.slice(1);
-
-  const properties: Property[] = [
-    {
-      id: "P001",
-      status: "Draft",
-      photo: "https://picsum.photos/200/300",
-      name: "Sample Property",
-      address: "1234 Sample Street",
-      latitude: "40.7128",
-      longitude: "-74.0060",
-      carpetArea: "1200 sq ft",
-      superBuiltUpArea: "1500 sq ft",
-      pincode: "10001",
-      state: "New York",
-    },
-    // Add more property objects as needed
-  ];
+  const fetchGeocodeData = async (addresses: any) => {
+    try {
+      const response = await geocodeAddresses(addresses);
+      if (response.status === 200) {
+        const geocodedData = response.data;
+        // Handle the geocoded data
+      } else {
+        console.error("Failed to fetch geocode data");
+      }
+      return response?.data || [];
+    } catch (error) {
+      console.error("Error fetching geocode data:", error);
+    }
+  };
 
   const handleJsonData = async (data: Location[]) => {
     setJsonData(data);
 
     try {
-      await createProperty(data);
+      const udpatedData = await fetchGeocodeData([data[0]]);
+      const response = await createProperty(udpatedData[0]);
+      setProperties(response.data.data);
     } catch (e) {
       console.error("Error creating property:", e);
     }
@@ -60,7 +59,7 @@ const Properties: React.FC = () => {
           <List data={properties} />
         </TabsContent>
         <TabsContent value="map">
-          <Map locations={propertiesData} />
+          <Map locations={properties} />
         </TabsContent>
       </Tabs>
     </div>

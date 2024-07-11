@@ -3,13 +3,12 @@ import axios from "axios";
 
 const GEOCODE_API_URL = "https://maps.googleapis.com/maps/api/geocode/json";
 
-export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  let addresses = searchParams.getAll("address");
+export async function POST(request: NextRequest) {
+  const { addresses } = await request.json();
 
-  if (addresses.length === 0) {
+  if (!Array.isArray(addresses) || addresses.length === 0) {
     return NextResponse.json(
-      { error: "At least one valid address parameter is required" },
+      { error: "A non-empty array of addresses is required" },
       { status: 400 }
     );
   }
@@ -23,26 +22,21 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const fetchPromises = addresses.map(async (address) => {
+    const fetchPromises = addresses.map(async (addressObj) => {
       try {
-        const response = await axios.get(`${GEOCODE_API_URL}?address=${encodeURIComponent(address)}&key=${apiKey}`);
+        const response = await axios.get(
+          `${GEOCODE_API_URL}?address=${encodeURIComponent(addressObj.address)}&key=${apiKey}`
+        );
         const data = response.data;
 
         if (data.status !== "OK") {
-          return {
-            address,
-            error: data.error_message || "Failed to geocode address",
-          };
+          return { ...addressObj, latitude: null, longitude: null };
         }
 
         const { lat, lng } = data.results[0].geometry.location;
-        return { address, lat, lng };
-
+        return { ...addressObj, latitude: lat, longitude: lng };
       } catch (error) {
-        return {
-          address,
-          error: "Error fetching geocode data",
-        };
+        return { ...addressObj, latitude: null, longitude: null };
       }
     });
 

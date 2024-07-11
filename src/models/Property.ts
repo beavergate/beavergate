@@ -30,93 +30,95 @@ const propertySchema: Schema = new mongoose.Schema(
   {
     status: {
       type: String,
-      enum: ["Active", "Inactive"], // Example statuses
+      enum: ["Active", "Inactive"],
       default: "Active",
     },
     photos: {
       type: [String],
+      default: null,
     },
     name: {
       type: String,
-      required: true,
+      default: null,
     },
     address: {
       type: String,
-      required: true,
+      default: null,
     },
     latitude: {
       type: Number,
-      required: true,
+      default: null,
     },
     longitude: {
       type: Number,
-      required: true,
+      default: null, 
     },
     carpet_area: {
       type: Number,
-      required: true,
-      get: function (value: number) {
+      required: false,
+      default: null,
+      get: function (value: number | null) {
         return value;
       },
     },
     super_built_up_area: {
       type: Number,
-      required: true,
-      get: function (value: number) {
+      required: false,
+      default: null,
+      get: function (value: number | null) {
         return value;
       },
     },
     pincode: {
       type: String,
-      required: true,
     },
     state: {
       type: String,
-      required: true,
     },
     cost_centre: {
       type: String,
+      default: null,
     },
     landlords: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Landlord",
-        required: true,
       },
     ],
     commercial: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Commercial",
-      required: true,
+        ref: "Commercial",
     },
     compliance: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Compliance",
-      required: true,
+        ref: "Compliance",
     },
     utility: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Utility",
+        ref: "Utility",
     },
-    tags: {
-      type: [String],
-    },
+    tags: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Tag",
+      },
+    ],
     user: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId, 
       ref: "User",
       required: true,
     },
-  },
+  }, 
   {
     timestamps: true,
   }
 );
 
-propertySchema.path("carpet_area").get(function (value: number) {
+propertySchema.path("carpet_area").get(function (value: number | null) {
   return value;
 });
 
-propertySchema.path("super_built_up_area").get(function (value: number) {
+propertySchema.path("super_built_up_area").get(function (value: number | null) {
   return value;
 });
 

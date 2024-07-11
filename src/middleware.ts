@@ -9,6 +9,7 @@ export async function middleware(req: NextRequest) {
   const url = req.nextUrl.clone();
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
+  req.user = token;
   if (nonAuthPath.includes(url.pathname)) {
     if (token) {
       url.pathname = "/";

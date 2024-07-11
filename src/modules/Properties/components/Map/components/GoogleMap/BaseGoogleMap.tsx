@@ -10,8 +10,8 @@ export interface Location {
   id: number;
   name: string;
   address: string;
-  lat: number;
-  lng: number;
+  latitude: number;
+  longitude: number;
 }
 
 interface MapComponentProps {
@@ -40,7 +40,9 @@ const BaseGoogleMap: React.FC<MapComponentProps> = ({ locations }) => {
     if (map && locations.length > 0) {
       const bounds = new google.maps.LatLngBounds();
       locations.forEach((location) => {
-        bounds.extend(new google.maps.LatLng(location.lat, location.lng));
+        bounds.extend(
+          new google.maps.LatLng(location.latitude, location.longitude)
+        );
       });
       map.fitBounds(bounds);
     }
@@ -63,7 +65,7 @@ const BaseGoogleMap: React.FC<MapComponentProps> = ({ locations }) => {
       onLoad={(map) => setMap(map)}
     >
       {map &&
-      locations.length &&
+        locations.length &&
         locations.map((location: any) => {
           if (location?.error || !location.id) {
             return null;
@@ -73,7 +75,7 @@ const BaseGoogleMap: React.FC<MapComponentProps> = ({ locations }) => {
               key={location.id}
               id={location.id}
               name={location.name}
-              position={{ lat: location.lat, lng: location.lng }}
+              position={{ lat: location.latitude, lng: location.longitude }}
             />
           );
         })}

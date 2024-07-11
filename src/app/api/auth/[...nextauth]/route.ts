@@ -3,7 +3,7 @@ import GoogleProvider from "next-auth/providers/google";
 import connectToDatabase from "@/lib/mongodb";
 import User from "@/models/User";
 
-const authOptions: AuthOptions = {
+export const authOptions: AuthOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -15,15 +15,23 @@ const authOptions: AuthOptions = {
         const name = profile.name;
         const image = profile.picture;
 
+        let _id;
+
         const exist_user = await User.findOne({ email });
-        if (!exist_user) User.create({ email, name, balance: 0, image });
+  
+        _id = exist_user?._id;
+        if (!exist_user) {
+          const user = await User.create({ email, name, balance: 0, image });
+          _id = user?._id;
+        }
 
         return {
-          id: profile.sub,
+          _id,
+          id: _id,
           name,
-          email,
+          email, 
           image,
-        };
+        } as any;
       },
     }),
   ],
@@ -36,13 +44,19 @@ const authOptions: AuthOptions = {
   callbacks: {
     async session({ session, token }: any) {
       if (session.user) {
-        session.user.id = token.sub;
+        session.user._id = token._id;
+        session.user.email = token.email;
+        session.user.name = token.name;
+        session.user.image = token.picture;
       }
       return session;
     },
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
+        token._id = user._id;
+        token.email = user.email;
+        token.name = user.name;
+        token.picture = user.image;
       }
       return token;
     },
@@ -54,4 +68,3 @@ export const handler = NextAuth(authOptions);
 // Handle each HTTP method
 export const GET = handler;
 export const POST = handler;
-

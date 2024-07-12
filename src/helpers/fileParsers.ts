@@ -81,20 +81,20 @@ const mapToProperty = (item: any): Partial<IProperty> => {
 
 const mapToLandlord = (item: any): Partial<ILandlord> => {
   return {
-    name: item.name || "",
-    pan: item.pan || "",
-    aadhaar_card_number: item.aadhaar_card_number || "",
-    gstin: item.gstin || "",
-    bank_name: item.bank_name || "",
-    bank_ifsc: item.bank_ifsc || "",
-    bank_account_number: item.bank_account_number || "",
-    landlord_registered_address: item.landlord_registered_address || "",
-    contact_number: item.contact_number || "",
-    contact_email: item.contact_email || "",
-    pan_attachment: item.pan_attachment || "",
-    aadhaar_card_attachment: item.aadhaar_card_attachment || "",
-    cancelled_cheque_attachment: item.cancelled_cheque_attachment || "",
-    vendor_code: item.vendor_code || "",
+    name: item.landlord_name || "",
+    pan: item.landlord_pan || "",
+    aadhaar_card_number: item.landlord_aadhaar_card_number || "",
+    gstin: item.landlord_gstin || "",
+    bank_name: item.landlord_bank_name || "",
+    bank_ifsc: item.landlord_bank_ifsc || "",
+    bank_account_number: item.landlord_bank_account_number || "",
+    landlord_registered_address: item.landlord_landlord_registered_address || "",
+    contact_number: item.landlord_contact_number || "",
+    contact_email: item.landlord_contact_email || "",
+    pan_attachment: item.landlord_pan_attachment || "",
+    aadhaar_card_attachment: item.landlord_aadhaar_card_attachment || "",
+    cancelled_cheque_attachment: item.landlord_cancelled_cheque_attachment || "",
+    vendor_code: item.landlord_vendor_code || "",
   };
 };
 

@@ -8,9 +8,17 @@ import InputPopover from "@/components/InputPopover";
 import { Location } from "./components/Map/components/GoogleMap/BaseGoogleMap";
 import { useCreateProperty } from "@/hooks/property";
 import { useGeocodeAddresses } from "@/hooks/geocode";
+import { useCreateLandlord } from "@/hooks/landlord";
+import { useCreateCompliance } from "@/hooks/compliance";
+import { useCreateCommericial } from "@/hooks/commercial";
+import { useCreateUtility } from "@/hooks/utility";
 
 const Properties: React.FC = () => {
   const [createProperty] = useCreateProperty();
+  const [createLandlord] = useCreateLandlord();
+  const [createCompliance] = useCreateCompliance();
+  const [createCommericial] = useCreateCommericial();
+  const [createUtility] = useCreateUtility();
   const [jsonData, setJsonData] = useState<Location[]>([]);
   const [properties, setProperties] = useState<any>([]);
   const [files, setFiles] = useState<File[]>([]);
@@ -30,7 +38,6 @@ const Properties: React.FC = () => {
       console.error("Error fetching geocode data:", error);
     }
   };
-
   const handleJsonData = async (data: Location[]) => {
     setJsonData(data);
 

@@ -29,7 +29,6 @@ const InputPopover: React.FC<InputPopoverProps> = ({
 
       const handleFileLoad = (data: any[]) => {
         handleJsonData(data);
-        console.log("data", data);
         uploadComponentRef.current?.close();
       };
 

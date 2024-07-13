@@ -25,3 +25,28 @@ export const useCreateProperty = () => {
 
   return [createProperty, { loading, error }] as const;
 };
+
+export const useCreateFullProperty = () => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const createFullProperty = async (data: any) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await callApi({
+        url: "/api/properties/create",
+        method: "POST",
+        data,
+      });
+      setLoading(false);
+      return res;
+    } catch (err: any) {
+      setError(err.message);
+      setLoading(false);
+      throw err;
+    }
+  };
+
+  return [createFullProperty, { loading, error }] as const;
+};

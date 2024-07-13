@@ -88,12 +88,14 @@ const mapToLandlord = (item: any): Partial<ILandlord> => {
     bank_name: item.landlord_bank_name || "",
     bank_ifsc: item.landlord_bank_ifsc || "",
     bank_account_number: item.landlord_bank_account_number || "",
-    landlord_registered_address: item.landlord_landlord_registered_address || "",
+    landlord_registered_address:
+      item.landlord_landlord_registered_address || "",
     contact_number: item.landlord_contact_number || "",
     contact_email: item.landlord_contact_email || "",
     pan_attachment: item.landlord_pan_attachment || "",
     aadhaar_card_attachment: item.landlord_aadhaar_card_attachment || "",
-    cancelled_cheque_attachment: item.landlord_cancelled_cheque_attachment || "",
+    cancelled_cheque_attachment:
+      item.landlord_cancelled_cheque_attachment || "",
     vendor_code: item.landlord_vendor_code || "",
   };
 };
@@ -154,6 +156,14 @@ export const dataMiddleware = (data: any[], type: ModelDataTypes) => {
       return data.map((item) => mapToCommercial(item));
     case "utility":
       return data.map((item) => mapToUtility(item));
+    case "all":
+      return [{
+        landlords: data.map((item) => mapToLandlord(item)),
+        compliance: data.map((item) => mapToCompliance(item))[0],
+        commercial: data.map((item) => mapToCommercial(item))[0],
+        utility: data.map((item) => mapToUtility(item))[0],
+        property: data.map((item) => mapToProperty(item))[0],
+      }];
     default:
       return data;
   }

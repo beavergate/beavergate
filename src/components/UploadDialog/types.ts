@@ -1,6 +1,6 @@
 export type UploadDialogProps = {
     files: File[]
-    setFiles: React.Dispatch<React.SetStateAction<File[]>>
+    onFilesChange: (files: File[]) => void;
   };
   
   export type UploadDialogHandle = {

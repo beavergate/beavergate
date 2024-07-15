@@ -21,7 +21,7 @@ const CustomHeader: FC = () => {
       <UploadDialog
         ref={uploadComponentRef}
         files={files}
-        setFiles={setFiles}
+        onFilesChange={setFiles}
       />
 
       <div className="flex justify-between mb-4">
@@ -29,7 +29,10 @@ const CustomHeader: FC = () => {
           <Button className="bg-white text-black border border-solid rounded-md hover:bg-slate-100 hover:border-black">
             <FilterIcon />
           </Button>
-          <Button onClick={() => uploadComponentRef.current?.open()} className="bg-white text-black border border-solid rounded-md hover:bg-slate-100 hover:border-black">
+          <Button
+            onClick={() => uploadComponentRef.current?.open()}
+            className="bg-white text-black border border-solid rounded-md hover:bg-slate-100 hover:border-black"
+          >
             <Import />
           </Button>
         </div>

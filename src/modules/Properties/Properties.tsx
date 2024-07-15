@@ -53,7 +53,7 @@ const Properties: React.FC = () => {
   return (
     <div className="container mx-auto p-4">
       <InputPopover
-        setFiles={setFiles}
+        onFilesChange={(files) => setFiles(files)}
         files={files}
         handleJsonData={handleJsonData}
       />

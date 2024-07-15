@@ -3,12 +3,10 @@ import { Dialog, DialogContent, DialogOverlay } from "@/ui/dialog";
 import React, { forwardRef, useImperativeHandle, useState } from "react";
 import { UploadDialogHandle, UploadDialogProps } from "./types";
 
-
-
 const UploadDialog = forwardRef<UploadDialogHandle, UploadDialogProps>(
-  ({files, setFiles}, ref) => {
+  ({ files, onFilesChange }, ref) => {
     const [isOpen, setIsOpen] = useState(false);
-    
+
     useImperativeHandle(ref, () => ({
       open: () => setIsOpen(true),
       close: () => setIsOpen(false),
@@ -24,7 +22,7 @@ const UploadDialog = forwardRef<UploadDialogHandle, UploadDialogProps>(
             <BaseDragger
               className="w-[500px] h-[180px]"
               files={files}
-              setFiles={setFiles}
+              onFilesChange={onFilesChange}
             />
           </div>
         </DialogContent>

@@ -13,30 +13,18 @@ import { parseFile } from "@/helpers/fileParsers";
 interface InputPopoverProps {
   handleJsonData: (data: any[]) => void;
   files: File[];
-  setFiles: Dispatch<SetStateAction<File[]>>;
+  onFilesChange: (files: File[]) => void;
 }
 
 const InputPopover: React.FC<InputPopoverProps> = ({
   handleJsonData,
   files,
-  setFiles,
+  onFilesChange,
 }) => {
   const uploadComponentRef = useRef<UploadDialogHandle>(null);
 
-  useEffect(() => {
-    if (files.length) {
-      const file = files[0];
-
-      const handleFileLoad = (data: any[]) => {
-        handleJsonData(data);
-        uploadComponentRef.current?.close();
-      };
-
-      parseFile(file, handleFileLoad, "property");
-    }
-  }, [files]);
   const handleFileRemove = () => {
-    setFiles([]);
+    onFilesChange([]);
     handleJsonData([]);
   };
 
@@ -45,7 +33,17 @@ const InputPopover: React.FC<InputPopoverProps> = ({
       <UploadDialog
         ref={uploadComponentRef}
         files={files}
-        setFiles={setFiles}
+        onFilesChange={(files) => {
+          if (files.length) {
+            const file = files[0];
+            const handleFileLoad = (data: any[]) => {
+              handleJsonData(data);
+              uploadComponentRef.current?.close();
+            };
+
+            parseFile(file, handleFileLoad, "property");
+          }
+        }}
       />
       <div className="max-w-sm p-4 bg-white shadow-md rounded-md h-[300px] w-[300px]">
         <div className="flex items-center mb-4">

@@ -7,12 +7,9 @@ export async function GET() {
   try {
     await connectToDatabase();
     const utilities = await Utility.find({});
-    return NextResponse.json({ success: true, data: utilities });
+    return NextResponse.json(utilities, { status: 200 });
   } catch (error: any) {
-    return NextResponse.json(
-      { success: false, message: error.message },
-      { status: 400 }
-    );
+    return NextResponse.json(error, { status: 400 });
   }
 }
 
@@ -22,11 +19,8 @@ export async function POST(req: NextRequest) {
     await connectToDatabase();
     const data = await req.json();
     const utility = await Utility.create(data);
-    return NextResponse.json({ success: true, data: utility }, { status: 201 });
+    return NextResponse.json(utility, { status: 201 });
   } catch (error: any) {
-    return NextResponse.json(
-      { success: false, message: error.message },
-      { status: 400 }
-    );
+    return NextResponse.json(error, { status: 400 });
   }
 }

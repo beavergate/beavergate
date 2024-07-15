@@ -7,12 +7,9 @@ export async function GET() {
   try {
     await connectToDatabase();
     const landlords = await Landlord.find({});
-    return NextResponse.json({ success: true, data: landlords });
+    return NextResponse.json(landlords, { status: 200 });
   } catch (error: any) {
-    return NextResponse.json(
-      { success: false, message: error.message },
-      { status: 400 }
-    );
+    return NextResponse.json(error, { status: 400 });
   }
 }
 
@@ -22,14 +19,8 @@ export async function POST(req: NextRequest) {
     await connectToDatabase();
     const data = await req.json();
     const landlord = await Landlord.create(data);
-    return NextResponse.json(
-      { success: true, data: landlord },
-      { status: 201 }
-    );
+    return NextResponse.json(landlord, { status: 201 });
   } catch (error: any) {
-    return NextResponse.json(
-      { success: false, message: error.message },
-      { status: 400 }
-    );
+    return NextResponse.json(error, { status: 400 });
   }
 }

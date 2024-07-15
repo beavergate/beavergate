@@ -12,17 +12,11 @@ export async function GET(
     await connectToDatabase();
     const user = await User.findById(params.id);
     if (!user) {
-      return NextResponse.json(
-        { success: false, message: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
-    return NextResponse.json({ success: true, data: user });
+    return NextResponse.json(user, { status: 200 });
   } catch (error: any) {
-    return NextResponse.json(
-      { success: false, message: error.message },
-      { status: 400 }
-    );
+    return NextResponse.json(error, { status: 400 });
   }
 }
 
@@ -37,16 +31,10 @@ export async function PATCH(
       new: true,
     });
     if (!user) {
-      return NextResponse.json(
-        { success: false, message: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
-    return NextResponse.json({ success: true, data: user });
+    return NextResponse.json(user, { status: 200 });
   } catch (error: any) {
-    return NextResponse.json(
-      { success: false, message: error.message },
-      { status: 400 }
-    );
+    return NextResponse.json(error, { status: 400 });
   }
 }

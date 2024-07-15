@@ -9,12 +9,9 @@ export async function GET() {
   try {
     await connectToDatabase();
     const properties = await Property.find({});
-    return NextResponse.json({ success: true, data: properties });
+    return NextResponse.json(properties);
   } catch (error: any) {
-    return NextResponse.json(
-      { success: false, message: error.message },
-      { status: 400 }
-    );
+    return NextResponse.json(error, { status: 400 });
   }
 }
 
@@ -26,14 +23,8 @@ export async function POST(req: NextRequest) {
     await connectToDatabase();
     const data = await req.json();
     const property = await Property.create({ ...data, user });
-    return NextResponse.json(
-      { success: true, data: property },
-      { status: 201 }
-    );
+    return NextResponse.json(property, { status: 201 });
   } catch (error: any) {
-    return NextResponse.json(
-      { success: false, message: error.message },
-      { status: 400 }
-    );
+    return NextResponse.json(error, { status: 400 });
   }
 }

@@ -7,9 +7,9 @@ export async function GET() {
   try {
     await connectToDatabase();
     const compliances = await Compliance.find({});
-    return NextResponse.json({ success: true, data: compliances });
+    return NextResponse.json(compliances, { status: 200 });
   } catch (error: any) {
-    return NextResponse.json({ success: false, message: error.message }, { status: 400 });
+    return NextResponse.json(error, { status: 400 });
   }
 }
 
@@ -19,8 +19,8 @@ export async function POST(req: NextRequest) {
     await connectToDatabase();
     const data = await req.json();
     const compliance = await Compliance.create(data);
-    return NextResponse.json({ success: true, data: compliance }, { status: 201 });
+    return NextResponse.json(compliance, { status: 201 });
   } catch (error: any) {
-    return NextResponse.json({ success: false, message: error.message }, { status: 400 });
+    return NextResponse.json(error, { status: 400 });
   }
 }

@@ -44,7 +44,7 @@ const Properties: React.FC = () => {
     try {
       const udpatedData = await fetchGeocodeData([data[0]]);
       const response = await createProperty(udpatedData[0]);
-      setProperties(response.data.data);
+      setProperties(response.data);
     } catch (e) {
       console.error("Error creating property:", e);
     }

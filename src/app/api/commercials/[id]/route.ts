@@ -12,24 +12,15 @@ export async function GET(
     await connectToDatabase();
     const { id } = params;
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return NextResponse.json(
-        { success: false, message: "Invalid ID" },
-        { status: 400 }
-      );
+      return NextResponse.json({ message: "Invalid ID" }, { status: 400 });
     }
     const commercial = await Commercial.findById(id);
     if (!commercial) {
-      return NextResponse.json(
-        { success: false, message: "Commercial not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ message: "Commercial not found" }, { status: 404 });
     }
-    return NextResponse.json({ success: true, data: commercial });
+    return NextResponse.json(commercial, { status: 200 });
   } catch (error: any) {
-    return NextResponse.json(
-      { success: false, message: error.message },
-      { status: 400 }
-    );
+    return NextResponse.json(error, { status: 400 });
   }
 }
 
@@ -42,10 +33,7 @@ export async function PUT(
     await connectToDatabase();
     const { id } = params;
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return NextResponse.json(
-        { success: false, message: "Invalid ID" },
-        { status: 400 }
-      );
+      return NextResponse.json({ message: "Invalid ID" }, { status: 400 });
     }
     const data = await req.json();
     const commercial = await Commercial.findByIdAndUpdate(id, data, {
@@ -53,16 +41,10 @@ export async function PUT(
       runValidators: true,
     });
     if (!commercial) {
-      return NextResponse.json(
-        { success: false, message: "Commercial not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ message: "Commercial not found" }, { status: 404 });
     }
-    return NextResponse.json({ success: true, data: commercial });
+    return NextResponse.json(commercial, { status: 200 });
   } catch (error: any) {
-    return NextResponse.json(
-      { success: false, message: error.message },
-      { status: 400 }
-    );
+    return NextResponse.json(error, { status: 400 });
   }
 }

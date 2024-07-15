@@ -80,17 +80,11 @@ export async function POST(req: NextRequest) {
     await mongoSession.commitTransaction();
     mongoSession.endSession();
 
-    return NextResponse.json(
-      { success: true, data: property },
-      { status: 201 }
-    );
+    return NextResponse.json(property, { status: 201 });
   } catch (error: any) {
     await mongoSession.abortTransaction();
     mongoSession.endSession();
 
-    return NextResponse.json(
-      { success: false, message: error.message },
-      { status: 400 }
-    );
+    return NextResponse.json(error, { status: 400 });
   }
 }

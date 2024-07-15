@@ -6,12 +6,9 @@ export async function GET() {
   try {
     await connectToDatabase();
     const users = await User.find({});
-    return NextResponse.json({ success: true, data: users });
+    return NextResponse.json(users, { status: 200 });
   } catch (error: any) {
-    return NextResponse.json(
-      { success: false, message: error.message },
-      { status: 400 }
-    );
+    return NextResponse.json(error, { status: 400 });
   }
 }
 
@@ -20,11 +17,8 @@ export async function POST(req: NextRequest) {
     await connectToDatabase();
     const data = await req.json();
     const user = await User.create(data);
-    return NextResponse.json({ success: true, data: user }, { status: 201 });
+    return NextResponse.json(user, { status: 201 });
   } catch (error: any) {
-    return NextResponse.json(
-      { success: false, message: error.message },
-      { status: 400 }
-    );
+    return NextResponse.json(error, { status: 400 });
   }
 }

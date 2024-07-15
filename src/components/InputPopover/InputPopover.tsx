@@ -8,24 +8,26 @@ import React, {
 import UploadDialog from "@/components/UploadDialog";
 import { UploadDialogHandle } from "../UploadDialog/types";
 import { Button } from "@/ui/button";
-import { parseFile } from "@/helpers/fileParsers";
+import { ModelDataTypes, parseFile } from "@/helpers/fileParsers";
 
 interface InputPopoverProps {
-  handleJsonData: (data: any[]) => void;
+  handleData: (data: any[]) => void;
   files: File[];
   onFilesChange: (files: File[]) => void;
+  type?: ModelDataTypes;
 }
 
 const InputPopover: React.FC<InputPopoverProps> = ({
-  handleJsonData,
+  handleData,
   files,
   onFilesChange,
+  type = "property",
 }) => {
   const uploadComponentRef = useRef<UploadDialogHandle>(null);
 
   const handleFileRemove = () => {
     onFilesChange([]);
-    handleJsonData([]);
+    handleData([]);
   };
 
   return (
@@ -37,11 +39,11 @@ const InputPopover: React.FC<InputPopoverProps> = ({
           if (files.length) {
             const file = files[0];
             const handleFileLoad = (data: any[]) => {
-              handleJsonData(data);
+              handleData(data);
               uploadComponentRef.current?.close();
             };
 
-            parseFile(file, handleFileLoad, "property");
+            parseFile(file, handleFileLoad, type);
           }
         }}
       />

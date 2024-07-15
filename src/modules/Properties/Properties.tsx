@@ -37,7 +37,7 @@ const Properties: React.FC = () => {
       console.error("Error fetching geocode data:", error);
     }
   };
-  const handleJsonData = async (data: Location[]) => {
+  const handleData = async (data: Location[]) => {
     try {
       const updatedData = await fetchGeocodeData(data);
       const createPromises = updatedData.map((item: any) =>
@@ -59,7 +59,8 @@ const Properties: React.FC = () => {
       <InputPopover
         onFilesChange={(files) => setFiles(files)}
         files={files}
-        handleJsonData={handleJsonData}
+        handleData={handleData}
+        type="property"
       />
       <Tabs defaultValue="list">
         <TabsList className="grid w-full grid-cols-2">

@@ -19,7 +19,6 @@ const Properties: React.FC = () => {
   const [createCompliance] = useCreateCompliance();
   const [createCommericial] = useCreateCommericial();
   const [createUtility] = useCreateUtility();
-  const [jsonData, setJsonData] = useState<Location[]>([]);
   const [properties, setProperties] = useState<any>([]);
   const [files, setFiles] = useState<File[]>([]);
   const [geocodeAddresses] = useGeocodeAddresses();
@@ -39,12 +38,17 @@ const Properties: React.FC = () => {
     }
   };
   const handleJsonData = async (data: Location[]) => {
-    setJsonData(data);
-
     try {
-      const udpatedData = await fetchGeocodeData([data[0]]);
-      const response = await createProperty(udpatedData[0]);
-      setProperties(response.data);
+      const updatedData = await fetchGeocodeData(data);
+      const createPromises = updatedData.map((item: any) =>
+        createProperty(item)
+      );
+      const responses = await Promise.all(createPromises);
+      const newProperties = responses.map((response: any) => response.data);
+      setProperties((prevProperties: any) => [
+        ...prevProperties,
+        ...newProperties,
+      ]);
     } catch (e) {
       console.error("Error creating property:", e);
     }

@@ -67,7 +67,7 @@ const BaseGoogleMap: React.FC<MapComponentProps> = ({ locations }) => {
       {map &&
         locations.length &&
         locations.map((location: any) => {
-          if (location?.error || !location.id) {
+          if (!location.latitude || !location.longitude) {
             return null;
           }
           return (

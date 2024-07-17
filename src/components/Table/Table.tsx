@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import React, { useState, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, forwardRef, useImperativeHandle } from "react";
 import {
   flexRender,
   getCoreRowModel,
@@ -11,8 +11,8 @@ import {
   SortingState,
   ColumnFiltersState,
   RowSelectionState,
-} from '@tanstack/react-table';
-import { Button } from '@/components/ui/button';
+} from "@tanstack/react-table";
+import { Button } from "@/components/ui/button";
 import {
   Table as BaseTable,
   TableBody,
@@ -20,19 +20,26 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { cn } from '@/utils/cn';
+} from "@/components/ui/table";
+import { cn } from "@/utils/cn";
 
 interface TableProps<TData> {
   data: TData[];
   columns: ColumnDef<TData, any>[];
+  handleRowClick?: (row: TData) => void;
   customHeader?: React.ReactNode;
   tableClassName?: string;
 }
 
 const Table = forwardRef(
   <TData extends object>(
-    { data, columns, customHeader = '', tableClassName = '' }: TableProps<TData>,
+    {
+      data,
+      columns,
+      handleRowClick,
+      customHeader = "",
+      tableClassName = "",
+    }: TableProps<TData>,
     ref: React.Ref<{ table: ReturnType<typeof useReactTable<TData>> }>
   ) => {
     const [sorting, setSorting] = useState<SortingState>([]);
@@ -67,19 +74,25 @@ const Table = forwardRef(
       <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
         {customHeader && <div className="mb-4">{customHeader}</div>}
         <div
-          className={cn('rounded-md border my-2 bg-white dark:bg-gray-800', tableClassName)}
+          className={cn(
+            "rounded-md border my-2 bg-white dark:bg-gray-800",
+            tableClassName
+          )}
         >
           <BaseTable>
             <TableHeader className="bg-gray-100 dark:bg-gray-900">
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
-                    <TableHead key={header.id} className="bg-gray-100 dark:bg-gray-900">
+                    <TableHead
+                      key={header.id}
+                      className="bg-gray-100 dark:bg-gray-900"
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext(),
+                            header.getContext()
                           )}
                     </TableHead>
                   ))}
@@ -91,14 +104,15 @@ const Table = forwardRef(
                 table.getRowModel().rows.map((row) => (
                   <TableRow
                     key={row.id}
-                    data-state={row.getIsSelected() && 'selected'}
-                    className="hover:bg-gray-50 dark:hover:bg-gray-700"
+                    data-state={row.getIsSelected() && "selected"}
+                    className="hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer"
+                    onClick={() => handleRowClick && handleRowClick(row.original)}
                   >
                     {row.getAllCells().map((cell) => (
                       <TableCell key={cell.id} className="dark:text-white">
                         {flexRender(
                           cell.column.columnDef.cell,
-                          cell.getContext(),
+                          cell.getContext()
                         )}
                       </TableCell>
                     ))}
@@ -119,9 +133,9 @@ const Table = forwardRef(
         </div>
       </div>
     );
-  },
+  }
 );
 
-Table.displayName = 'Table';
+Table.displayName = "Table";
 
 export default Table;

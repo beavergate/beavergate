@@ -7,7 +7,13 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "dev:clean": "rm -rf node_modules yarn.lock && yarn && yarn dev"
+    "dev:clean": "rm -rf node_modules yarn.lock && yarn && yarn dev",
+    "docker:build": "docker build -t your-dockerhub-username/your-nextjs-app .",
+    "docker:run": "docker run -d -p 3000:3000 --name beavergate -e MONGODB_URI=${MONGODB_URI} your-dockerhub-username/your-nextjs-app",
+    "docker:stop": "docker stop beavergate",
+    "docker:rm": "docker rm beavergate",
+    "docker:compose:up": "docker-compose up -d",
+    "docker:compose:down": "docker-compose down"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.608.0",

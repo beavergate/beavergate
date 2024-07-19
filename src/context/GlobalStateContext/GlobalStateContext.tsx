@@ -1,4 +1,3 @@
-// src/context/GlobalStateContext.tsx
 "use client";
 
 import React, { createContext, useContext, useReducer, ReactNode } from "react";
@@ -6,11 +5,10 @@ import { Action, GlobalStateContextType, State } from "./types";
 
 // Define the shape of your global state
 
-// Add other actions here
-
 // Initial state
 const initialState: State = {
   user: { id: null, name: null },
+  properties: [],
   // Initialize other global state variables here
 };
 
@@ -21,6 +19,11 @@ function globalStateReducer(state: State, action: Action): State {
       return {
         ...state,
         user: { id: action.payload.id, name: action.payload.name },
+      };
+    case "SET_PROPERTIES":
+      return {
+        ...state,
+        properties: action.payload,
       };
     // Add other cases here
     default:
@@ -37,12 +40,17 @@ const GlobalStateContext = createContext<GlobalStateContextType | undefined>(
 export const GlobalStateProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(globalStateReducer, initialState);
 
-  const setUser = () => {
-    dispatch({ type: "SET_USER", payload: { id: "1", name: "John Doe" } });
+  const setUser = (id: string, name: string) => {
+    dispatch({ type: "SET_USER", payload: { id, name } });
+  };
+
+  const setProperties = (properties: any) => {
+    dispatch({ type: "SET_PROPERTIES", payload: properties });
   };
 
   const actions = {
     setUser,
+    setProperties,
     // Add other actions here
   };
 

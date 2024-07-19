@@ -1,3 +1,4 @@
+import { useGlobalState } from "@/context/GlobalStateContext";
 import callApi from "@/lib/api";
 import { useState } from "react";
 
@@ -48,6 +49,32 @@ export const useGetPropertyById = () => {
   };
 
   return [getPropertyById, { loading, error }] as const;
+};
+export const useGetPropertiesByUserId = () => {
+  const {actions: {setProperties}} = useGlobalState()
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const getPropertiesByUserId = async (id: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await callApi({
+        url: `/api/properties/user/${id}`,
+        method: "GET",
+      });
+      setLoading(false);
+      setProperties(res.data)
+      return res.data;
+    } catch (err: any) {
+      setError(err.message);
+      setLoading(false);
+      throw err;
+    }
+  };
+
+  return [getPropertiesByUserId, { loading, error }] as const;
 };
 
 export const useCreateFullProperty = () => {

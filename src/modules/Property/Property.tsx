@@ -1,7 +1,18 @@
-import React, { useEffect, useState } from "react";
+"use client";
+import React, { useEffect, useRef, useState } from "react";
 import { useGetPropertyById } from "@/hooks/property";
+import { Button } from "@/ui/button";
+import {
+  ArrowBigLeft,
+  ArrowBigLeftDash,
+  LucideArrowBigLeftDash,
+} from "lucide-react";
+import { useRouter } from "next/navigation";
+import PropertyEditDialog, { PropertyEditDialogHandle } from "./components/PropertyEditDialog";
 
 const Property = ({ id }: { id: string }) => {
+  const router = useRouter()
+  const propertyEditDialogRef = useRef<PropertyEditDialogHandle>(null);
   const [getPropertyById, { loading, error }] = useGetPropertyById();
   const [property, setProperty] = useState<any>(null);
 
@@ -23,11 +34,41 @@ const Property = ({ id }: { id: string }) => {
   }
 
   return (
-    <div>
-      <h1>{property.name}</h1>
-      <p>{property.description}</p>
-      {/* Add more property details here */}
+    <>
+    
+    <PropertyEditDialog ref={propertyEditDialogRef} property={property} onSubmit={() => {}} />
+    <div className="p-6 bg-gray-50 min-h-screen">
+      <div className="py-4">
+        <Button className="rounded-md" onClick={()=>{router.back()}}>
+          <ArrowBigLeft /> Back
+        </Button>
+      </div>
+
+      <div className="bg-white shadow rounded-lg p-4">
+        <div className="flex justify-between items-center mb-4">
+          {/* Add other header elements here if needed */}
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="bg-gray-100 p-4 rounded relative">
+            <h2 className="text-lg font-semibold">Property Details</h2>
+            <Button className="absolute top-2 right-2 text-white rounded-md" onClick={() => propertyEditDialogRef.current?.open()}>
+              Edit
+            </Button>
+            <p>Status: {property.status}</p>
+            <p>Address: {property.address}</p>
+            <p>Latitude: {property.latitude}</p>
+            <p>Longitude: {property.longitude}</p>
+            <p>Carpet Area: {property.carpet_area}</p>
+            <p>Super Built-up Area: {property.super_built_up_area}</p>
+            <p>Pincode: {property.pincode}</p>
+            <p>State: {property.state}</p>
+            <p>Cost Centre: {property.cost_centre}</p>
+          </div>
+          {/* Add other sections here if needed */}
+        </div>
+      </div>
     </div>
+    </>
   );
 };
 

@@ -1,27 +1,52 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import List from "./components/List";
 import Map from "./components/Map";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import InputPopover from "@/components/InputPopover";
 import { Location } from "./components/Map/components/GoogleMap/BaseGoogleMap";
-import { useCreateProperty } from "@/hooks/property";
+import { useCreateProperty, useGetPropertiesByUserId } from "@/hooks/property";
 import { useGeocodeAddresses } from "@/hooks/geocode";
 import { useCreateLandlord } from "@/hooks/landlord";
 import { useCreateCompliance } from "@/hooks/compliance";
 import { useCreateCommericial } from "@/hooks/commercial";
 import { useCreateUtility } from "@/hooks/utility";
+import { useGlobalState } from "@/context/GlobalStateContext";
+import { useSession } from "next-auth/react";
+import { get } from "lodash";
+import { Session } from "next-auth";
+import { Property } from "./types";
 
-const Properties: React.FC = () => {
+const Properties = ({ session }: { session: Session | null }) => {
+  const {
+    state: { properties },
+    actions: { setProperties },
+  } = useGlobalState();
+  const user = get(session, "user", null);
   const [createProperty] = useCreateProperty();
   const [createLandlord] = useCreateLandlord();
   const [createCompliance] = useCreateCompliance();
   const [createCommericial] = useCreateCommericial();
   const [createUtility] = useCreateUtility();
-  const [properties, setProperties] = useState<any>([]);
   const [files, setFiles] = useState<File[]>([]);
   const [geocodeAddresses] = useGeocodeAddresses();
+  const [getPropertiesByUserId] = useGetPropertiesByUserId();
+
+  useEffect(() => {
+    const fetchProperty = async () => {
+      try {
+        if (user?._id) {
+          const data = await getPropertiesByUserId(user?._id);
+          setProperties(data);
+        }
+      } catch (err) {
+        console.error("Error fetching property:", err);
+      }
+    };
+
+    fetchProperty();
+  }, []);
 
   const fetchGeocodeData = async (addresses: any) => {
     try {
@@ -45,10 +70,7 @@ const Properties: React.FC = () => {
       );
       const responses = await Promise.all(createPromises);
       const newProperties = responses.map((response: any) => response.data);
-      setProperties((prevProperties: any) => [
-        ...prevProperties,
-        ...newProperties,
-      ]);
+      setProperties([...properties, ...newProperties]);
     } catch (e) {
       console.error("Error creating property:", e);
     }

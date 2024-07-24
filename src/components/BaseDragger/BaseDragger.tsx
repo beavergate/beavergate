@@ -34,7 +34,6 @@ const BaseDragger: React.FC<BaseDraggerProps> = ({
   ) => {
     if (fileRejections.length > 0) {
       toast({
-        closeicn: "destructive",
         description:
           "Some files were rejected due to size limit or unsupported format.",
       });

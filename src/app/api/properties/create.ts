@@ -8,7 +8,7 @@ import Commercial from "@/models/Commercial";
 import Utility from "@/models/Utility";
 import Tag from "@/models/Tag";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/[...nextauth]/route";
+import { authOptions } from "@/lib/authOptions";
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);

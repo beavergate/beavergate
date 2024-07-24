@@ -1,8 +1,8 @@
 import React from "react";
 import PropertiesModule from "modules/Properties";
 import { NextRequest } from "next/server";
-import { authOptions } from "app/api/auth/[...nextauth]/route";
 import { getServerSession, Session } from "next-auth";
+import { authOptions } from "@/lib/authOptions";
 
 const Properties = async () => {
   const session = await getServerSession(authOptions);

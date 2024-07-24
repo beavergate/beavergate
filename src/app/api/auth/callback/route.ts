@@ -1,6 +1,5 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-
 import type { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -9,8 +8,9 @@ export async function GET(request: NextRequest) {
 
   if (code) {
     const cookieStore = cookies();
+    // You can perform operations with cookies here
   }
 
-  // URL to redirect to after sign in process completes
+  // URL to redirect to after sign-in process completes
   return NextResponse.redirect(requestUrl.origin);
 }

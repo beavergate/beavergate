@@ -9,7 +9,7 @@ COPY package.json yarn.lock ./
 
 # Install Yarn globally and project dependencies
 RUN npm install -g yarn \
-    && yarn install --frozen-lockfile
+    && yarn 
 
 # Copy the rest of the application code
 COPY . .

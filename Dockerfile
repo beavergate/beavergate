@@ -7,9 +7,8 @@ WORKDIR /app
 # Copy package.json and yarn.lock first to leverage Docker cache
 COPY package.json yarn.lock ./
 
-# Install Yarn globally and project dependencies
-RUN npm install -g yarn \
-    && yarn 
+# Install project dependencies
+RUN yarn install --frozen-lockfile
 
 # Copy the rest of the application code
 COPY . .

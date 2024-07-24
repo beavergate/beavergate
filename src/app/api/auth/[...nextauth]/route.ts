@@ -2,8 +2,9 @@ import NextAuth, { AuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import connectToDatabase from "@/lib/mongodb";
 import User from "@/models/User";
+import { NextApiRequest, NextApiResponse } from "next";
 
-export const authOptions: AuthOptions = {
+const authOptions: AuthOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -63,8 +64,6 @@ export const authOptions: AuthOptions = {
   },
 };
 
-export const handler = NextAuth(authOptions);
+const handler = (req: NextApiRequest, res: NextApiResponse) => NextAuth(req, res, authOptions);
 
-// Handle each HTTP method
-export const GET = handler;
-export const POST = handler;
+export default handler;

@@ -8,12 +8,17 @@
     "start": "next start",
     "lint": "next lint",
     "dev:clean": "rm -rf node_modules yarn.lock && yarn && yarn dev",
-    "docker:build": "docker build -t beavergatetech/beavergate-next-app .",
-    "docker:run": "docker run -d -p 3000:3000 --name beavergate -e MONGODB_URI=${MONGODB_URI} beavergatetech/beavergate-next-app",
-    "docker:stop": "docker stop beavergate",
-    "docker:rm": "docker rm beavergate",
-    "docker:compose:up": "docker-compose up -d",
-    "docker:compose:down": "docker-compose down"
+    "docker:dev": "docker-compose -f docker-compose.dev.yml up",
+    "docker:dev:build": "docker-compose -f docker-compose.dev.yml build",
+    "docker:dev:logs": "docker-compose -f docker-compose.dev.yml logs -f",
+    "docker:dev:down": "docker-compose -f docker-compose.dev.yml down",
+    "docker:prod": "docker-compose -f docker-compose.prod.yml up -d",
+    "docker:prod:build": "docker-compose -f docker-compose.prod.yml build",
+    "docker:prod:push": "docker-compose -f docker-compose.prod.yml push",
+    "docker:prod:pull": "docker-compose -f docker-compose.prod.yml pull",
+    "docker:prod:rm": "docker-compose -f docker-compose.prod.yml down",
+    "docker:prod:logs": "docker-compose -f docker-compose.prod.yml logs -f",
+    "docker:prod:down": "docker-compose -f docker-compose.prod.yml down"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.608.0",

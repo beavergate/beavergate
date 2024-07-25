@@ -46,4 +46,5 @@ jobs:
         run: docker rm -f beavergate-app-container
         
       - name: Run docker container
-        run: docker run -d -p 3000:3000 --name beavergate-app-container beavergatetech/beavergate-next-app
+        run: docker run -d --init -p 3000:3000 --name beavergate-app-container beavergatetech/beavergate-next-app
+ 

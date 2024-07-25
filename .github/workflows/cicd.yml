@@ -27,23 +27,23 @@ jobs:
           echo "NEXT_PUBLIC_GOOGLE_GEOCODE_API_KEY=${{ secrets.NEXT_PUBLIC_GOOGLE_GEOCODE_API_KEY }}" >> .env
 
       - name: Build docker image
-        run: docker build -t beavergatetech/beavergate-next-app .
+        run: docker-compose -f docker-compose.prod.yml build
 
       - name: Login to docker hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
         
       - name: Publish image to docker hub
-        run: docker push beavergatetech/beavergate-next-app:latest
+        run: docker-compose -f docker-compose.prod.yml push
 
   deploy:
     needs: build
     runs-on: self-hosted
     steps:
       - name: Pull image from docker hub
-        run: docker pull beavergatetech/beavergate-next-app:latest
+        run: docker-compose -f docker-compose.prod.yml pull
         
       - name: Delete old container
         run: docker rm -f beavergate-app-container
         
       - name: Run docker container
-        run: docker run -d -p 3000:3000 --name beavergate-app-container beavergatetech/beavergate-next-app
+        run: docker-compose -f docker-compose.prod.yml up -d

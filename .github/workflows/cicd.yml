@@ -43,7 +43,7 @@ jobs:
         run: docker-compose -f docker-compose.prod.yml pull
         
       - name: Delete old container
-        run: docker rm -f beavergate-next-app-container
+        run: docker rm -f beavergate-app-container
         
       - name: Run docker container
         run: docker-compose -f docker-compose.prod.yml up -d

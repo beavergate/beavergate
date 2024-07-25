@@ -43,7 +43,7 @@ jobs:
         run: docker pull beavergatetech/beavergate-next-app:latest
         
       - name: Delete old container
-        run: docker rm -f beavergate-next-app-container
+        run: docker rm -f beavergate-app-container
         
       - name: Run docker container
         run: docker run -d -p 3000:3000 --name beavergate-app-container beavergatetech/beavergate-next-app

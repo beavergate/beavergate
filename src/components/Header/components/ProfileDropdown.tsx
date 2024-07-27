@@ -1,4 +1,6 @@
+"use client";
 import React from "react";
+import { signOut } from "next-auth/react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/ui/avatar";
 import {
@@ -14,13 +16,26 @@ import {
 import { Button } from "@/ui/button";
 
 const ProfileDropdown = () => {
+  const handleLogout = async () => {
+    // Clear local storage
+    localStorage.clear();
+
+    // Clear session storage
+    sessionStorage.clear();
+
+    // Sign out using NextAuth
+    await signOut({ callbackUrl: "/" });
+  };
   return (
     <div>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-8 w-8 rounded-full">
             <Avatar className="h-8 w-8">
-              <AvatarImage src="https://github.com/shadcn.png" alt="Rodney Leonard" />
+              <AvatarImage
+                src="https://github.com/shadcn.png"
+                alt="Rodney Leonard"
+              />
               <AvatarFallback>RL</AvatarFallback>
             </Avatar>
           </Button>
@@ -60,7 +75,11 @@ const ProfileDropdown = () => {
             <DropdownMenuItem>New Team</DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => {
+              handleLogout();
+            }}
+          >
             Log out
             <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
           </DropdownMenuItem>

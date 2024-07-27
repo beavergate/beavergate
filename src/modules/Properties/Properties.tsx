@@ -24,6 +24,7 @@ const Properties = ({ session }: { session: Session | null }) => {
     actions: { setProperties },
   } = useGlobalState();
   const user = get(session, "user", null);
+  console.log("user", user);
   const [createProperty] = useCreateProperty();
   const [createLandlord] = useCreateLandlord();
   const [createCompliance] = useCreateCompliance();

@@ -157,13 +157,15 @@ export const dataMiddleware = (data: any[], type: ModelDataTypes) => {
     case "utility":
       return data.map((item) => mapToUtility(item));
     case "all":
-      return [{
-        landlords: data.map((item) => mapToLandlord(item)),
-        compliance: data.map((item) => mapToCompliance(item))[0],
-        commercial: data.map((item) => mapToCommercial(item))[0],
-        utility: data.map((item) => mapToUtility(item))[0],
-        property: data.map((item) => mapToProperty(item))[0],
-      }];
+      return data.map((row) => {
+        return {
+          landlords: [mapToLandlord(row)],
+          compliance: mapToCompliance(row),
+          commercial: mapToCommercial(row),
+          utility: mapToUtility(row),
+          property: mapToProperty(row),
+        };
+      });
     default:
       return data;
   }

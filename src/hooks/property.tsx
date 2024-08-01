@@ -51,7 +51,9 @@ export const useGetPropertyById = () => {
   return [getPropertyById, { loading, error }] as const;
 };
 export const useGetPropertiesByUserId = () => {
-  const {actions: {setProperties}} = useGlobalState()
+  const {
+    actions: { setProperties },
+  } = useGlobalState();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -65,7 +67,7 @@ export const useGetPropertiesByUserId = () => {
         method: "GET",
       });
       setLoading(false);
-      setProperties(res.data)
+      setProperties(res.data);
       return res.data;
     } catch (err: any) {
       setError(err.message);
@@ -90,6 +92,7 @@ export const useCreateFullProperty = () => {
         method: "POST",
         data,
       });
+      console.log("res", res);
       setLoading(false);
       return res;
     } catch (err: any) {

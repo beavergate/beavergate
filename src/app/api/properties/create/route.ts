@@ -6,13 +6,24 @@ import Landlord from "@/models/Landlord";
 import Compliance from "@/models/Compliance";
 import Commercial from "@/models/Commercial";
 import Utility from "@/models/Utility";
-import Tag from "@/models/Tag";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
+
+const validateAndTransformBooleanFields = (data: any, fields: string[]) => {
+  fields.forEach((field) => {
+    if (typeof data[field] === "string") {
+      data[field] = data[field].toLowerCase() === "true";
+    }
+  });
+};
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
   const user = session?.user._id;
+
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
   await connectToDatabase();
 
@@ -22,15 +33,42 @@ export async function POST(req: NextRequest) {
     mongoSession.startTransaction();
 
     const data = await req.json();
-
+    console.log("Incoming data:", data);
     const {
       landlords: landlordsData,
       compliance: complianceData,
       commercial: commercialData,
       utility: utilityData,
-      tags: tagsData,
       property: propertyData,
     } = data;
+
+    // Validate incoming data here (pseudo-code, replace with actual validation)
+    if (
+      !landlordsData ||
+      !Array.isArray(landlordsData) ||
+      landlordsData.length === 0
+    ) {
+      throw new Error("Invalid landlords data");
+    }
+    if (!complianceData || typeof complianceData !== "object") {
+      throw new Error("Invalid compliance data");
+    }
+    if (!commercialData || typeof commercialData !== "object") {
+      throw new Error("Invalid commercial data");
+    }
+    if (!utilityData || typeof utilityData !== "object") {
+      throw new Error("Invalid utility data");
+    }
+    if (!propertyData || typeof propertyData !== "object") {
+      throw new Error("Invalid property data");
+    }
+
+    // Transform boolean fields in complianceData
+    validateAndTransformBooleanFields(complianceData, [
+      "fire",
+      "shops_and_establishment",
+      "title_clearance",
+    ]);
 
     // Create Landlords
     const landlords = await Promise.all(
@@ -54,29 +92,19 @@ export async function POST(req: NextRequest) {
       session: mongoSession,
     });
 
-    // Create Tags
-    const tags = await Promise.all(
-      tagsData.map((tagData: any) =>
-        Tag.create([tagData], { session: mongoSession })
-      )
-    );
+    const fullProprty = {
+      ...propertyData,
+      user,
+      landlords: landlords.map((landlord: any) => landlord[0]._id),
+      compliance: compliance[0]._id,
+      commercial: commercial[0]._id,
+      utility: utility[0]._id,
+    };
 
     // Create Property
-    const property = await Property.create(
-      [
-        {
-          ...propertyData,
-          user,
-          landlords: landlords.map((landlord: any) => landlord[0]._id),
-          compliance: compliance[0]._id,
-          commercial: commercial[0]._id,
-          utility: utility[0]._id,
-          tags: tags.map((tag: any) => tag[0]._id),
-        },
-      ],
-      { session: mongoSession }
-    );
-
+    const [property] = await Property.create([fullProprty], {
+      session: mongoSession,
+    });
     await mongoSession.commitTransaction();
     mongoSession.endSession();
 
@@ -85,6 +113,7 @@ export async function POST(req: NextRequest) {
     await mongoSession.abortTransaction();
     mongoSession.endSession();
 
-    return NextResponse.json(error, { status: 400 });
+    console.error("Error creating property:", error);
+    return NextResponse.json({ error: error.message }, { status: 400 });
   }
 }

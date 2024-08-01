@@ -4,7 +4,6 @@ import { ILandlord } from "./Landlord";
 import { ICommercial } from "./Commercial";
 import { ICompliance } from "./Compliance";
 import { IUtility } from "./Utility";
-import { ITag } from "./Tag";
 
 export type IProperty = Document & {
   status: string;
@@ -23,15 +22,13 @@ export type IProperty = Document & {
   commercial: ICommercial["_id"];
   compliance: ICompliance["_id"];
   utility: IUtility["_id"];
-  tags: ITag["_id"][];
+  tags: string[]; // Change tags to an array of strings
 };
 
 const propertySchema: Schema = new mongoose.Schema(
   {
     status: {
       type: String,
-      enum: ["Active", "Inactive"],
-      default: "Active",
     },
     photos: {
       type: [String],
@@ -51,7 +48,7 @@ const propertySchema: Schema = new mongoose.Schema(
     },
     longitude: {
       type: Number,
-      default: null, 
+      default: null,
     },
     carpet_area: {
       type: Number,
@@ -79,6 +76,11 @@ const propertySchema: Schema = new mongoose.Schema(
       type: String,
       default: null,
     },
+    tags: [
+      {
+        type: String,
+      },
+    ],
     landlords: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -87,28 +89,23 @@ const propertySchema: Schema = new mongoose.Schema(
     ],
     commercial: {
       type: mongoose.Schema.Types.ObjectId,
-        ref: "Commercial",
+      ref: "Commercial",
     },
     compliance: {
       type: mongoose.Schema.Types.ObjectId,
-        ref: "Compliance",
+      ref: "Compliance",
     },
     utility: {
       type: mongoose.Schema.Types.ObjectId,
-        ref: "Utility",
+      ref: "Utility",
     },
-    tags: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Tag",
-      },
-    ],
+
     user: {
-      type: mongoose.Schema.Types.ObjectId, 
+      type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-  }, 
+  },
   {
     timestamps: true,
   }

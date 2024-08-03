@@ -41,10 +41,17 @@ jobs:
     steps:
       - name: Pull image from docker hub
         run: docker pull beavergatetech/beavergate-next-app:latest
-        
-      - name: Delete old container
-        run: docker rm -f beavergate-app-container
-        
+
+      - name: Stop and remove old container
+        run: |
+          docker rm -f beavergate-app-container || true  # Ignore if container does not exist
+
+      - name: Remove old images
+        run: |
+          # Remove dangling images
+          docker image prune -f
+          # Optionally remove specific old images
+          docker images --filter=reference='beavergatetech/beavergate-next-app' --format "{{.ID}}" | tail -n +2 | xargs -r docker rmi
+
       - name: Run docker container
         run: docker run -d --init -p 3000:3000 --name beavergate-app-container beavergatetech/beavergate-next-app
- 

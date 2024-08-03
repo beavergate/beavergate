@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+// src/components/List.tsx
+import React from "react";
 import Table from "@/components/Table";
 import { Property } from "../../types";
 import CustomHeader from "./components/CustomHeader";
@@ -12,11 +13,11 @@ import { useRouter } from "next/navigation";
 
 type ListProp = {
   data: Property[];
+  loading: boolean; // Add loading prop
 };
 
-const List: React.FC<ListProp> = ({ data }) => {
-
-  const router = useRouter()
+const List: React.FC<ListProp> = ({ data, loading }) => {
+  const router = useRouter();
 
   const columns: ColumnDef<Property, any>[] = [
     {
@@ -31,20 +32,6 @@ const List: React.FC<ListProp> = ({ data }) => {
         <div className="font-medium">{row.original.status}</div>
       ),
     },
-    // {
-    //   accessorKey: "photo",
-    //   header: "Photo",
-    //   cell: ({ row }) => (
-    //     <div>
-    //       <img
-    //         src={row.original.photo}
-    //         alt={row.original.name}
-    //         className="h-10 w-10"
-    //       />
-    //     </div>
-    //   ),
-    // },
-
     {
       accessorKey: "address",
       header: "Address",
@@ -60,7 +47,6 @@ const List: React.FC<ListProp> = ({ data }) => {
       header: "Pincode",
       cell: ({ row }) => <div>{row.original.pincode}</div>,
     },
-
     {
       accessorKey: "carpetArea",
       header: () => (
@@ -75,7 +61,6 @@ const List: React.FC<ListProp> = ({ data }) => {
       ),
       cell: ({ row }) => <div>{row.original.carpetArea}</div>,
     },
-
     {
       accessorKey: "superBuiltUpArea",
       header: () => (
@@ -94,7 +79,6 @@ const List: React.FC<ListProp> = ({ data }) => {
       ),
       cell: ({ row }) => <div>{row.original.superBuiltUpArea}</div>,
     },
-
     {
       accessorKey: "latitude",
       header: "Latitude",
@@ -108,8 +92,8 @@ const List: React.FC<ListProp> = ({ data }) => {
   ];
 
   const handleRowClick = (data: any) => {
-    router.push(`/properties/${data?._id}`)
-  }
+    router.push(`/properties/${data?._id}`);
+  };
 
   return (
     <div className="container mx-auto p-4">
@@ -119,6 +103,7 @@ const List: React.FC<ListProp> = ({ data }) => {
         columns={columns as any}
         customHeader={<CustomHeader />}
         handleRowClick={handleRowClick}
+        loading={loading} // Pass loading prop here
       />
     </div>
   );

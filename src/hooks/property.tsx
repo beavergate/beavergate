@@ -58,16 +58,16 @@ export const useGetPropertiesByUserId = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const getPropertiesByUserId = async (id: string) => {
+  const getPropertiesByUserId = async (id: string, page: number = 1, limit: number = 10) => {
     setLoading(true);
     setError(null);
     try {
       const res = await callApi({
-        url: `/api/properties/user/${id}`,
+        url: `/api/properties/user/${id}?page=${page}&limit=${limit}`,
         method: "GET",
       });
       setLoading(false);
-      setProperties(res.data);
+      setProperties(res.data.properties);
       return res.data;
     } catch (err: any) {
       setError(err.message);

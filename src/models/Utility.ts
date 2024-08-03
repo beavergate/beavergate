@@ -8,8 +8,8 @@ export type IUtility = Document & {
   water_board?: string;
   water_consumer_number?: string;
   water_bill_amount?: number;
-  type: string; 
-  property: IProperty["_id"]; 
+  type: string;
+  property: IProperty["_id"];
 };
 
 const utilitySchema: Schema = new mongoose.Schema(
@@ -34,8 +34,6 @@ const utilitySchema: Schema = new mongoose.Schema(
     },
     type: {
       type: String,
-      enum: ["Autopay", "Reimbursement", "Others"],
-      required: true,
     },
     property: {
       type: mongoose.Schema.Types.ObjectId,

@@ -34,8 +34,24 @@ const Login: React.FC = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = (data: LoginSchema) => {
-    console.log(data);
+  const onSubmit = async (data: LoginSchema) => {
+    try {
+      const result = await signIn("credentials", {
+        redirect: false,
+        email: data.email,
+        password: data.password,
+      });
+
+      if (result?.error) {
+        // Handle error (e.g., display a message to the user)
+        console.error(result.error);
+      } else if (result?.ok) {
+        // Successful login, you can redirect the user or show a success message
+        console.log("Login successful");
+      }
+    } catch (error) {
+      console.error("An error occurred during login:", error);
+    }
   };
 
   if (!session) {
@@ -98,10 +114,7 @@ const Login: React.FC = () => {
               </Button>
 
               <p className="text-center text-sm text-gray-600 dark:text-gray-400 mt-4">
-                Dont have an account?{" "}
-                <Link href="/register">
-                  Register
-                </Link>
+                Dont have an account? <Link href="/register">Register</Link>
               </p>
             </form>
           </Form>
@@ -111,7 +124,9 @@ const Login: React.FC = () => {
   } else {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
-        <h1 className="text-2xl font-semibold">Welcome, {session.user?.name}</h1>
+        <h1 className="text-2xl font-semibold">
+          Welcome, {session.user?.name}
+        </h1>
         <Button onClick={() => signOut()} className="mt-4">
           Sign out
         </Button>

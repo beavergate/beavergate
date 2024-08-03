@@ -5,30 +5,26 @@ import List from "./components/List";
 import Map from "./components/Map";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import InputPopover from "@/components/InputPopover";
-import { Location } from "./components/Map/components/GoogleMap/BaseGoogleMap";
-import { useCreateProperty, useGetPropertiesByUserId } from "@/hooks/property";
+import {
+  useCreateFullProperty,
+  useCreateProperty,
+  useGetPropertiesByUserId,
+} from "@/hooks/property";
 import { useGeocodeAddresses } from "@/hooks/geocode";
-import { useCreateLandlord } from "@/hooks/landlord";
-import { useCreateCompliance } from "@/hooks/compliance";
-import { useCreateCommericial } from "@/hooks/commercial";
-import { useCreateUtility } from "@/hooks/utility";
 import { useGlobalState } from "@/context/GlobalStateContext";
-import { useSession } from "next-auth/react";
 import { get } from "lodash";
 import { Session } from "next-auth";
-import { Property } from "./types";
 
 const Properties = ({ session }: { session: Session | null }) => {
   const {
     state: { properties },
     actions: { setProperties },
   } = useGlobalState();
+  console.log("properties", properties);
   const user = get(session, "user", null);
+  console.log("user", user);
   const [createProperty] = useCreateProperty();
-  const [createLandlord] = useCreateLandlord();
-  const [createCompliance] = useCreateCompliance();
-  const [createCommericial] = useCreateCommericial();
-  const [createUtility] = useCreateUtility();
+  const [createFullProperty] = useCreateFullProperty();
   const [files, setFiles] = useState<File[]>([]);
   const [geocodeAddresses] = useGeocodeAddresses();
   const [getPropertiesByUserId] = useGetPropertiesByUserId();
@@ -62,12 +58,12 @@ const Properties = ({ session }: { session: Session | null }) => {
       console.error("Error fetching geocode data:", error);
     }
   };
-  const handleData = async (data: Location[]) => {
+  const handleData = async (data: any) => {
     try {
-      const updatedData = await fetchGeocodeData(data);
-      const createPromises = updatedData.map((item: any) =>
-        createProperty(item)
-      );
+      // const updatedData = await fetchGeocodeData(
+      //   data.map((d: any) => d.property)
+      // );
+      const createPromises = data.map((item: any) => createFullProperty(item));
       const responses = await Promise.all(createPromises);
       const newProperties = responses.map((response: any) => response.data);
       setProperties([...properties, ...newProperties]);
@@ -82,7 +78,7 @@ const Properties = ({ session }: { session: Session | null }) => {
         onFilesChange={(files) => setFiles(files)}
         files={files}
         handleData={handleData}
-        type="property"
+        type="all"
       />
       <Tabs defaultValue="list">
         <TabsList className="grid w-full grid-cols-2">

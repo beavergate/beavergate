@@ -6,6 +6,7 @@ import { DefaultUser as NextAuthDefaultUser } from "next-auth";
 declare module "next-auth" {
   interface DefaultUser extends NextAuthDefaultUser {
     _id?: string;
+    provider?: string;
   }
 }
 

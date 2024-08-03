@@ -17,6 +17,7 @@ import { FcGoogle } from "react-icons/fc";
 import SeperatorWithName from "@/components/SeperatorWithName";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRegister } from "@/hooks/auth";
 
 const registerSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters" }),
@@ -30,13 +31,19 @@ type RegisterSchema = z.infer<typeof registerSchema>;
 
 const Register: React.FC = () => {
   const { data: session } = useSession();
+  const [register, { loading, error }] = useRegister();
 
   const form = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
   });
 
-  const onSubmit = (data: RegisterSchema) => {
-    console.log(data);
+  const onSubmit = async (data: RegisterSchema) => {
+    try {
+      await register(data);
+      // Handle successful registration (e.g., redirect, show success message)
+    } catch (err) {
+      // Handle registration error (e.g., show error message)
+    }
   };
 
   if (!session) {
@@ -48,7 +55,9 @@ const Register: React.FC = () => {
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-8 bg-white dark:bg-gray-800 p-6 rounded shadow-md"
             >
-              <h1 className="text-xl font-semibold text-center mb-4">Register</h1>
+              <h1 className="text-xl font-semibold text-center mb-4">
+                Register
+              </h1>
 
               <FormField
                 control={form.control}
@@ -57,11 +66,7 @@ const Register: React.FC = () => {
                   <FormItem>
                     <FormLabel>Name</FormLabel>
                     <FormControl>
-                      <Input
-                        type="text"
-                        placeholder="Your name"
-                        {...field}
-                      />
+                      <Input type="text" placeholder="Your name" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -101,9 +106,13 @@ const Register: React.FC = () => {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full">
-                Register
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? "Registering..." : "Register"}
               </Button>
+
+              {error && (
+                <p className="text-red-500 text-center mt-4">{error}</p>
+              )}
 
               <SeperatorWithName text="OR" />
 
@@ -116,10 +125,7 @@ const Register: React.FC = () => {
               </Button>
 
               <p className="text-center text-sm text-gray-600 dark:text-gray-400 mt-4">
-                Already have an account?{" "}
-                <Link href="/login">
-                  Login
-                </Link>
+                Already have an account? <Link href="/login">Login</Link>
               </p>
             </form>
           </Form>
@@ -129,7 +135,9 @@ const Register: React.FC = () => {
   } else {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
-        <h1 className="text-2xl font-semibold">Welcome, {session.user?.name}</h1>
+        <h1 className="text-2xl font-semibold">
+          Welcome, {session.user?.name}
+        </h1>
         <Button onClick={() => signOut()} className="mt-4">
           Sign out
         </Button>

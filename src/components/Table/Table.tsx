@@ -1,3 +1,4 @@
+// src/components/Table.tsx
 "use client";
 
 import React, { useState, forwardRef, useImperativeHandle } from "react";
@@ -12,7 +13,6 @@ import {
   ColumnFiltersState,
   RowSelectionState,
 } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
 import {
   Table as BaseTable,
   TableBody,
@@ -29,6 +29,7 @@ interface TableProps<TData> {
   handleRowClick?: (row: TData) => void;
   customHeader?: React.ReactNode;
   tableClassName?: string;
+  loading?: boolean; // Add loading prop
 }
 
 const Table = forwardRef(
@@ -39,6 +40,7 @@ const Table = forwardRef(
       handleRowClick,
       customHeader = "",
       tableClassName = "",
+      loading = false, // Default to false
     }: TableProps<TData>,
     ref: React.Ref<{ table: ReturnType<typeof useReactTable<TData>> }>
   ) => {
@@ -79,57 +81,65 @@ const Table = forwardRef(
             tableClassName
           )}
         >
-          <BaseTable>
-            <TableHeader className="bg-gray-100 dark:bg-gray-900">
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <TableHead
-                      key={header.id}
-                      className="bg-gray-100 dark:bg-gray-900"
-                    >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  ))}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                    className="hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer"
-                    onClick={() => handleRowClick && handleRowClick(row.original)}
-                  >
-                    {row.getAllCells().map((cell) => (
-                      <TableCell key={cell.id} className="dark:text-white">
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
+          {loading ? (
+            <div className="flex justify-center items-center h-32">
+              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+            </div>
+          ) : (
+            <BaseTable>
+              <TableHeader className="bg-gray-100 dark:bg-gray-900">
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <TableHead
+                        key={header.id}
+                        className="bg-gray-100 dark:bg-gray-900"
+                      >
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
                     ))}
                   </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center dark:text-white"
-                  >
-                    No results.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </BaseTable>
+                ))}
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows?.length ? (
+                  table.getRowModel().rows.map((row) => (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && "selected"}
+                      className="hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer"
+                      onClick={() =>
+                        handleRowClick && handleRowClick(row.original)
+                      }
+                    >
+                      {row.getAllCells().map((cell) => (
+                        <TableCell key={cell.id} className="dark:text-white">
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center dark:text-white"
+                    >
+                      No results.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </BaseTable>
+          )}
         </div>
       </div>
     );

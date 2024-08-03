@@ -59,7 +59,7 @@ const List: React.FC<ListProp> = ({ data, loading }) => {
           </TooltipContent>
         </Tooltip>
       ),
-      cell: ({ row }) => <div>{row.original.carpetArea}</div>,
+      cell: ({ row }) => <div>{row.original.carpet_area}</div>,
     },
     {
       accessorKey: "superBuiltUpArea",
@@ -77,7 +77,7 @@ const List: React.FC<ListProp> = ({ data, loading }) => {
           </TooltipContent>
         </Tooltip>
       ),
-      cell: ({ row }) => <div>{row.original.superBuiltUpArea}</div>,
+      cell: ({ row }) => <div>{row.original.super_built_up_area}</div>,
     },
     {
       accessorKey: "latitude",
@@ -101,7 +101,7 @@ const List: React.FC<ListProp> = ({ data, loading }) => {
       <Table
         data={data}
         columns={columns as any}
-        customHeader={<CustomHeader />}
+        customHeader={<CustomHeader data={data} />}
         handleRowClick={handleRowClick}
         loading={loading} // Pass loading prop here
       />

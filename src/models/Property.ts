@@ -40,7 +40,8 @@ const propertySchema: Schema = new mongoose.Schema(
     },
     address: {
       type: String,
-      default: null,
+      required: true,
+      unique: true,
     },
     latitude: {
       type: Number,

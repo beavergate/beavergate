@@ -1,5 +1,4 @@
-// components/CustomHeader.tsx
-import { FC, useRef, useState } from "react";
+import { FC, useRef, useState, ChangeEvent, useCallback } from "react";
 import { Button } from "@/ui/button";
 import { ChevronDown, FilterIcon, Import, Search } from "lucide-react";
 import { Input } from "@/ui/input";
@@ -11,10 +10,34 @@ import {
 } from "@/ui/dropdown-menu";
 import UploadDialog from "@/components/UploadDialog";
 import { UploadDialogHandle } from "@/components/UploadDialog/types";
+import { Property } from "modules/Properties/types";
+import { useGetPropertiesByUserId } from "@/hooks/property";
+import debounce from "lodash/debounce";
 
-const CustomHeader: FC = () => {
+type Props = {
+  data: Property[];
+};
+
+const CustomHeader: FC<Props> = ({ data }) => {
+  const [getPropertiesByUserId, { loading }] = useGetPropertiesByUserId();
   const [files, setFiles] = useState<File[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>(""); // Track search query
   const uploadComponentRef = useRef<UploadDialogHandle>(null);
+
+  // Debounced search function
+  const debouncedSearch = useCallback(
+    debounce(async (query: string) => {
+      await getPropertiesByUserId({ q: query });
+    }, 300), // Delay of 300ms
+    []
+  );
+
+  // Handle search input change
+  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const query = event.target.value;
+    setSearchQuery(query);
+    debouncedSearch(query); // Call debounced search function
+  };
 
   return (
     <>
@@ -37,10 +60,12 @@ const CustomHeader: FC = () => {
           </Button>
         </div>
 
-        <div className="relative flex items-center w-[600px] border rounded-md ">
+        <div className="relative flex items-center w-[600px] border rounded-md">
           <Search className="absolute left-3 text-gray-500" />
           <Input
             type="text"
+            value={searchQuery}
+            onChange={handleSearchChange}
             placeholder="Search by Title, Counterparty, ID, Business User, Tags"
             className="pl-10 border-none focus:ring-0 dark:bg-gray-800 dark:text-white focus-visible:outline-none"
           />

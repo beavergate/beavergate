@@ -74,7 +74,6 @@ const mapToProperty = (item: any): Partial<IProperty> => {
     pincode: item.pincode || "",
     state: item.state || "",
     cost_centre: item.cost_centre || "",
-    // user: item.user || "",
     tags: item.tags ? [item.tags] : [],
   };
 };

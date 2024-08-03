@@ -5,9 +5,7 @@ import List from "./components/List";
 import Map from "./components/Map";
 import Pagination from "components/Pagination"; // Import Pagination component
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  useGetPropertiesByUserId,
-} from "@/hooks/property";
+import { useGetPropertiesByUserId } from "@/hooks/property";
 import { useGlobalState } from "@/context/GlobalStateContext";
 import { get } from "lodash";
 import { Session } from "next-auth";
@@ -26,7 +24,9 @@ const Properties = ({ session }: { session: Session | null }) => {
     const fetchProperties = async () => {
       try {
         if (user?._id) {
-          const { properties, totalPages } = await getPropertiesByUserId(user._id, currentPage);
+          const { properties, totalPages } = await getPropertiesByUserId({
+            page: currentPage,
+          });
           setProperties(properties);
           setTotalPages(totalPages);
         }
@@ -50,8 +50,13 @@ const Properties = ({ session }: { session: Session | null }) => {
           <TabsTrigger value="map">Map View</TabsTrigger>
         </TabsList>
         <TabsContent value="list">
-          <List data={properties} loading={loading} /> {/* Pass loading prop here */}
-          <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+          <List data={properties} loading={loading} />{" "}
+          {/* Pass loading prop here */}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
         </TabsContent>
         <TabsContent value="map">
           <Map locations={properties} />

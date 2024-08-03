@@ -8,6 +8,7 @@ import Commercial from "@/models/Commercial";
 import Utility from "@/models/Utility";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
+import { geocodeAddress, geocodeAddresses } from "@/services/geocodeService";
 
 const validateAndTransformBooleanFields = (data: any, fields: string[]) => {
   fields.forEach((field) => {
@@ -92,8 +93,12 @@ export async function POST(req: NextRequest) {
       session: mongoSession,
     });
 
+    const geocodedData = await geocodeAddress(propertyData.address);
+
+    const proprtyWithLocation = { ...propertyData, ...geocodedData };
+
     const fullProprty = {
-      ...propertyData,
+      ...proprtyWithLocation,
       user,
       landlords: landlords.map((landlord: any) => landlord[0]._id),
       compliance: compliance[0]._id,

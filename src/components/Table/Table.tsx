@@ -1,4 +1,3 @@
-// src/components/Table.tsx
 "use client";
 
 import React, { useState, forwardRef, useImperativeHandle } from "react";
@@ -35,7 +34,7 @@ interface TableProps<TData> {
 const Table = forwardRef(
   <TData extends object>(
     {
-      data,
+      data = [],
       columns,
       handleRowClick,
       customHeader = "",
@@ -72,6 +71,9 @@ const Table = forwardRef(
       table,
     }));
 
+    // Ensure table and its methods are defined
+    const rowModel = table?.getRowModel();
+
     return (
       <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
         {customHeader && <div className="mb-4">{customHeader}</div>}
@@ -88,7 +90,7 @@ const Table = forwardRef(
           ) : (
             <BaseTable>
               <TableHeader className="bg-gray-100 dark:bg-gray-900">
-                {table.getHeaderGroups().map((headerGroup) => (
+                {table?.getHeaderGroups().map((headerGroup) => (
                   <TableRow key={headerGroup.id}>
                     {headerGroup.headers.map((header) => (
                       <TableHead
@@ -107,8 +109,8 @@ const Table = forwardRef(
                 ))}
               </TableHeader>
               <TableBody>
-                {table.getRowModel().rows?.length ? (
-                  table.getRowModel().rows.map((row) => (
+                {rowModel.rows.length ? (
+                  rowModel.rows.map((row) => (
                     <TableRow
                       key={row.id}
                       data-state={row.getIsSelected() && "selected"}

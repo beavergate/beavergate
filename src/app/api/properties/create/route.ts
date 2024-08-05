@@ -70,6 +70,7 @@ export async function POST(req: NextRequest) {
 
     const existingProperty = await Property.findOne({
       address: propertyData.address,
+      user,
     });
 
     if (existingProperty) {
@@ -99,7 +100,6 @@ export async function POST(req: NextRequest) {
     const geocodedData = await geocodeAddress(propertyData.address);
 
     const proprtyWithLocation = { ...propertyData, ...geocodedData };
-
     const fullProprty = {
       ...proprtyWithLocation,
       user,

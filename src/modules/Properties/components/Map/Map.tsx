@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from "react";
 import BaseGoogleMap from "./components/GoogleMap";
-import { Location } from "./components/GoogleMap/BaseGoogleMap";
 import { useGetPropertiesForMap } from "@/hooks/property";
 import { IProperty } from "@/models/Property";
 import Loader from "@/components/Loader";
 
-export type MapProps = {
-  properties: Location[];
-};
-
-const Map: React.FC<MapProps> = () => {
+const Map: React.FC = () => {
   const [properties, setProperties] = useState<IProperty[]>([]);
   const [getPropertiesForMap, { loading, error }] = useGetPropertiesForMap();
 

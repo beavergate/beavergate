@@ -1,23 +1,23 @@
 import React from "react";
 
-type PaginationProps = {
-  currentPage: number;
-  totalPages: number;
+export type PaginationProps = {
+  page: number;
+  total: number;
   onPageChange: (page: number) => void;
 };
 
 const Pagination: React.FC<PaginationProps> = ({
-  currentPage,
-  totalPages,
+  page,
+  total,
   onPageChange,
 }) => {
-  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+  const pages = Array.from({ length: total }, (_, i) => i + 1);
 
   return (
     <div className="flex justify-center items-center mt-4">
       <button
-        onClick={() => onPageChange(currentPage - 1)}
-        disabled={currentPage === 1}
+        onClick={() => onPageChange(page - 1)}
+        disabled={page === 1}
         className="px-3 py-1 mx-1 border rounded disabled:opacity-50"
       >
         Previous
@@ -27,15 +27,15 @@ const Pagination: React.FC<PaginationProps> = ({
           key={page}
           onClick={() => onPageChange(page)}
           className={`px-3 py-1 mx-1 border rounded ${
-            currentPage === page ? "bg-blue-500 text-white" : ""
+            page === page ? "bg-blue-500 text-white" : ""
           }`}
         >
           {page}
         </button>
       ))}
       <button
-        onClick={() => onPageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
+        onClick={() => onPageChange(page + 1)}
+        disabled={page === total}
         className="px-3 py-1 mx-1 border rounded disabled:opacity-50"
       >
         Next

@@ -19,7 +19,7 @@ export const useRegister = () => {
         data,
       });
       setLoading(false);
-      return res;
+      return res.data;
     } catch (err: any) {
       setError(err.message);
       setLoading(false);

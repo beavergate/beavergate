@@ -16,15 +16,19 @@ import {
   Table as BaseTable,
   TableBody,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/utils/cn";
+import Pagination from "../Pagination";
+import { PaginationProps } from "../Pagination/Pagination";
 
 interface TableProps<TData> {
   data: TData[];
   columns: ColumnDef<TData, any>[];
+  pagination: PaginationProps;
   handleRowClick?: (row: TData) => void;
   customHeader?: React.ReactNode;
   tableClassName?: string;
@@ -40,6 +44,7 @@ const Table = forwardRef(
       customHeader = "",
       tableClassName = "",
       loading = false, // Default to false
+      pagination,
     }: TableProps<TData>,
     ref: React.Ref<{ table: ReturnType<typeof useReactTable<TData>> }>
   ) => {
@@ -47,6 +52,7 @@ const Table = forwardRef(
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = useState({});
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+    const { page, total, onPageChange } = pagination;
 
     const table = useReactTable<TData>({
       data,
@@ -142,6 +148,9 @@ const Table = forwardRef(
               </TableBody>
             </BaseTable>
           )}
+          <div>
+            <Pagination page={page} total={total} onPageChange={onPageChange} />
+          </div>
         </div>
       </div>
     );

@@ -18,6 +18,7 @@ import SeperatorWithName from "@/components/SeperatorWithName";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRegister } from "@/hooks/auth";
+import { useRouter } from "next/navigation";
 
 const registerSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters" }),
@@ -31,6 +32,7 @@ type RegisterSchema = z.infer<typeof registerSchema>;
 
 const Register: React.FC = () => {
   const { data: session } = useSession();
+  const router = useRouter();
   const [register, { loading, error }] = useRegister();
 
   const form = useForm<RegisterSchema>({
@@ -39,7 +41,19 @@ const Register: React.FC = () => {
 
   const onSubmit = async (data: RegisterSchema) => {
     try {
-      await register(data);
+      const user = await register(data);
+      if (user) {
+        const result = await signIn("credentials", {
+          redirect: false,
+          email: data.email,
+          password: data.password,
+        });
+        if (result?.ok) {
+          router.push("/");
+          // Successful login, you can redirect the user or show a success message
+          console.log("Login successful");
+        }
+      }
       // Handle successful registration (e.g., redirect, show success message)
     } catch (err) {
       // Handle registration error (e.g., show error message)

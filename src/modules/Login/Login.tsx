@@ -17,6 +17,7 @@ import { FcGoogle } from "react-icons/fc";
 import SeperatorWithName from "@/components/SeperatorWithName";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -29,6 +30,7 @@ type LoginSchema = z.infer<typeof loginSchema>;
 
 const Login: React.FC = () => {
   const { data: session } = useSession();
+  const router = useRouter();
 
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
@@ -46,6 +48,7 @@ const Login: React.FC = () => {
         // Handle error (e.g., display a message to the user)
         console.error(result.error);
       } else if (result?.ok) {
+        router.push("/");
         // Successful login, you can redirect the user or show a success message
         console.log("Login successful");
       }

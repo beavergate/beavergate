@@ -114,3 +114,27 @@ export const useCreateFullProperty = () => {
 
   return [createFullProperty, { loading, error }] as const;
 };
+
+export const useGetPropertiesForMap = () => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const getPropertiesForMap = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await callApi({
+        url: `/api/properties/map`,
+        method: "GET",
+      });
+      setLoading(false);
+      return res.data;
+    } catch (err: any) {
+      setError(err.message);
+      setLoading(false);
+      throw err;
+    }
+  };
+
+  return [getPropertiesForMap, { loading, error }] as const;
+};

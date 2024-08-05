@@ -34,7 +34,6 @@ export async function POST(req: NextRequest) {
     mongoSession.startTransaction();
 
     const data = await req.json();
-    console.log("Incoming data:", data);
     const {
       landlords: landlordsData,
       compliance: complianceData,
@@ -43,7 +42,6 @@ export async function POST(req: NextRequest) {
       property: propertyData,
     } = data;
 
-    // Validate incoming data here (pseudo-code, replace with actual validation)
     if (
       !landlordsData ||
       !Array.isArray(landlordsData) ||
@@ -64,31 +62,36 @@ export async function POST(req: NextRequest) {
       throw new Error("Invalid property data");
     }
 
-    // Transform boolean fields in complianceData
     validateAndTransformBooleanFields(complianceData, [
       "fire",
       "shops_and_establishment",
       "title_clearance",
     ]);
 
-    // Create Landlords
+    const existingProperty = await Property.findOne({
+      address: propertyData.address,
+    });
+
+    if (existingProperty) {
+      await mongoSession.commitTransaction();
+      mongoSession.endSession();
+      return NextResponse.json(existingProperty, { status: 200 });
+    }
+
     const landlords = await Promise.all(
       landlordsData.map((landlordData: any) =>
         Landlord.create([landlordData], { session: mongoSession })
       )
     );
 
-    // Create Compliance
     const compliance = await Compliance.create([complianceData], {
       session: mongoSession,
     });
 
-    // Create Commercial
     const commercial = await Commercial.create([commercialData], {
       session: mongoSession,
     });
 
-    // Create Utility
     const utility = await Utility.create([utilityData], {
       session: mongoSession,
     });
@@ -106,10 +109,10 @@ export async function POST(req: NextRequest) {
       utility: utility[0]._id,
     };
 
-    // Create Property
     const [property] = await Property.create([fullProprty], {
       session: mongoSession,
     });
+
     await mongoSession.commitTransaction();
     mongoSession.endSession();
 

@@ -5,6 +5,8 @@
 import React, { useEffect, useState } from "react";
 import { GoogleMap, LoadScript, useJsApiLoader } from "@react-google-maps/api";
 import BaseMarker from "./BaseMarker/BaseMarker";
+import { IProperty } from "@/models/Property";
+import Loader from "@/components/Loader";
 
 export interface Location {
   id: number;
@@ -15,7 +17,7 @@ export interface Location {
 }
 
 interface MapComponentProps {
-  locations: Location[];
+  properties: IProperty[];
 }
 
 const containerStyle = {
@@ -30,26 +32,29 @@ const center = {
 
 const api = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
 
-const BaseGoogleMap: React.FC<MapComponentProps> = ({ locations }) => {
+const BaseGoogleMap: React.FC<MapComponentProps> = ({ properties }) => {
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: api,
   });
+
   useEffect(() => {
-    if (map && locations.length > 0) {
+    if (map && properties.length > 0) {
       const bounds = new google.maps.LatLngBounds();
-      locations.forEach((location) => {
-        bounds.extend(
-          new google.maps.LatLng(location.latitude, location.longitude)
-        );
+      properties.forEach((property) => {
+        if (property.latitude && property.longitude) {
+          bounds.extend(
+            new google.maps.LatLng(property.latitude, property.longitude)
+          );
+        }
       });
       map.fitBounds(bounds);
     }
-  }, [map, locations]);
+  }, [map, properties]);
 
   if (!isLoaded) {
-    return <div>loading...</div>;
+    return <Loader />;
   }
 
   return (
@@ -65,8 +70,8 @@ const BaseGoogleMap: React.FC<MapComponentProps> = ({ locations }) => {
       onLoad={(map) => setMap(map)}
     >
       {map &&
-        locations.length &&
-        locations.map((location: any) => {
+        properties.length &&
+        properties.map((location: any) => {
           if (!location.latitude || !location.longitude) {
             return null;
           }

@@ -34,6 +34,10 @@ const api = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
 
 const BaseGoogleMap: React.FC<MapComponentProps> = ({ properties }) => {
   const [map, setMap] = useState<google.maps.Map | null>(null);
+  const [activeMarker, setActiveMarker] = useState<string | undefined>(
+    undefined
+  );
+
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: api,
@@ -71,16 +75,16 @@ const BaseGoogleMap: React.FC<MapComponentProps> = ({ properties }) => {
     >
       {map &&
         properties.length &&
-        properties.map((location: any) => {
-          if (!location.latitude || !location.longitude) {
+        properties.map((property: IProperty) => {
+          if (!property.latitude || !property.longitude) {
             return null;
           }
           return (
             <BaseMarker
-              key={location.id}
-              id={location.id}
-              name={location.name}
-              position={{ lat: location.latitude, lng: location.longitude }}
+              key={property._id}
+              property={property}
+              activeMarker={activeMarker}
+              setActiveMarker={setActiveMarker}
             />
           );
         })}

@@ -6,6 +6,7 @@ import { ICompliance } from "./Compliance";
 import { IUtility } from "./Utility";
 
 export type IProperty = Document & {
+  _id: string;
   status: string;
   photos?: string[];
   name: string;

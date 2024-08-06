@@ -35,9 +35,7 @@ import {
 } from "@/ui/select";
 
 const commercialSchema = z.object({
-  rent: z
-    .string()
-    .refine((val) => !isNaN(parseFloat(val)), "Must be a number"),
+  rent: z.string().refine((val) => !isNaN(parseFloat(val)), "Must be a number"),
   security_deposit: z
     .string()
     .refine((val) => !isNaN(parseFloat(val)), "Must be a number"),
@@ -212,7 +210,11 @@ const CommercialEditDialog = forwardRef<
                   <FormItem>
                     <FormLabel>Rent Payment Date</FormLabel>
                     <FormControl>
-                      <Input type="date" {...field} value={convertNullToEmptyString(field.value)} />
+                      <Input
+                        type="date"
+                        {...field}
+                        value={convertNullToEmptyString(field.value)}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -242,7 +244,11 @@ const CommercialEditDialog = forwardRef<
                   <FormItem>
                     <FormLabel>Escalation Clause</FormLabel>
                     <FormControl>
-                      <Input type="text" {...field} value={convertNullToEmptyString(field.value)} />
+                      <Input
+                        type="text"
+                        {...field}
+                        value={convertNullToEmptyString(field.value)}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -255,7 +261,11 @@ const CommercialEditDialog = forwardRef<
                   <FormItem>
                     <FormLabel>Deductibles</FormLabel>
                     <FormControl>
-                      <Input type="text" {...field} value={convertNullToEmptyString(field.value)} />
+                      <Input
+                        type="text"
+                        {...field}
+                        value={convertNullToEmptyString(field.value)}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -285,7 +295,11 @@ const CommercialEditDialog = forwardRef<
                   <FormItem>
                     <FormLabel>Delayed Payments Interest</FormLabel>
                     <FormControl>
-                      <Input type="text" {...field} value={convertNullToEmptyString(field.value)} />
+                      <Input
+                        type="text"
+                        {...field}
+                        value={convertNullToEmptyString(field.value)}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -298,7 +312,11 @@ const CommercialEditDialog = forwardRef<
                   <FormItem>
                     <FormLabel>Lesser Scope of Work</FormLabel>
                     <FormControl>
-                      <Input type="text" {...field} value={convertNullToEmptyString(field.value)} />
+                      <Input
+                        type="text"
+                        {...field}
+                        value={convertNullToEmptyString(field.value)}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -311,7 +329,11 @@ const CommercialEditDialog = forwardRef<
                   <FormItem>
                     <FormLabel>Lessee Scope of Work</FormLabel>
                     <FormControl>
-                      <Input type="text" {...field} value={convertNullToEmptyString(field.value)} />
+                      <Input
+                        type="text"
+                        {...field}
+                        value={convertNullToEmptyString(field.value)}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -324,7 +346,11 @@ const CommercialEditDialog = forwardRef<
                   <FormItem>
                     <FormLabel>Tenure</FormLabel>
                     <FormControl>
-                      <Input type="text" {...field} value={convertNullToEmptyString(field.value)} />
+                      <Input
+                        type="text"
+                        {...field}
+                        value={convertNullToEmptyString(field.value)}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

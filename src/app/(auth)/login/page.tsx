@@ -1,6 +1,6 @@
 "use client";
 
-import Login from "modules/Login";
+import Login from "modules/Auth/Login";
 
 export default function LoginPage() {
 

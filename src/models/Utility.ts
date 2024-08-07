@@ -1,5 +1,4 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
-import { IProperty } from "./Property"; // Ensure the path is correct
 
 export type IUtility = Document & {
   electricity_board?: string;
@@ -9,7 +8,6 @@ export type IUtility = Document & {
   water_consumer_number?: string;
   water_bill_amount?: number;
   type: string;
-  property: IProperty["_id"];
 };
 
 const utilitySchema: Schema = new mongoose.Schema(
@@ -34,10 +32,6 @@ const utilitySchema: Schema = new mongoose.Schema(
     },
     type: {
       type: String,
-    },
-    property: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Property",
     },
   },
   {

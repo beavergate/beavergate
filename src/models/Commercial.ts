@@ -1,5 +1,4 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
-import { IProperty } from "./Property";
 
 export type ICommercial = Document & {
   rent: number;
@@ -17,7 +16,6 @@ export type ICommercial = Document & {
   lesser_scope_of_work?: string;
   lessee_scope_of_work?: string;
   tenure?: string; // Tenure field added
-  property: IProperty["_id"]; 
 };
 
 const commercialSchema: Schema = new mongoose.Schema(
@@ -71,10 +69,6 @@ const commercialSchema: Schema = new mongoose.Schema(
     tenure: {
       type: String,
     },
-    property: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Property",
-    },
   },
   {
     timestamps: true,
@@ -82,6 +76,7 @@ const commercialSchema: Schema = new mongoose.Schema(
 );
 
 const Commercial: Model<ICommercial> =
-  mongoose.models.Commercial || mongoose.model<ICommercial>("Commercial", commercialSchema);
+  mongoose.models.Commercial ||
+  mongoose.model<ICommercial>("Commercial", commercialSchema);
 
 export default Commercial;

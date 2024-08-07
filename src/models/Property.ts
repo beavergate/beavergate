@@ -1,9 +1,9 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 import { IUser } from "./User";
-import { ILandlord } from "./Landlord";
-import { ICommercial } from "./Commercial";
-import { ICompliance } from "./Compliance";
-import { IUtility } from "./Utility";
+import Landlord, { ILandlord } from "./Landlord";
+import Commercial, { ICommercial } from "./Commercial";
+import Compliance, { ICompliance } from "./Compliance";
+import Utility, { IUtility } from "./Utility";
 
 export type IProperty = Document & {
   _id: string;

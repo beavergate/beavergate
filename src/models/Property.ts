@@ -87,19 +87,23 @@ const propertySchema: Schema = new mongoose.Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Landlord",
+        required: true,
       },
     ],
     commercial: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Commercial",
+      required: true,
     },
     compliance: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Compliance",
+      required: true,
     },
     utility: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Utility",
+      required: true,
     },
 
     user: {

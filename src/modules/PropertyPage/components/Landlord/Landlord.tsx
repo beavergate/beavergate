@@ -2,40 +2,40 @@
 
 import React, { useEffect, useState } from "react";
 import Table from "@/components/Table";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { ColumnDef } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
 import { useGlobalState } from "@/context/GlobalStateContext";
 import { useGetLandlordByPropertyId } from "@/hooks/landlord";
+import { ILandlord } from "@/models/Landlord";
 
-const Landlord = ({ id }: { id: string }) => {
+const Landlord = ({ landlords }: { landlords: ILandlord[] }) => {
   const router = useRouter();
 
-  const {
-    state: { landlords },
-    actions: { setLandlords },
-  } = useGlobalState();
   const [getLandlordByPropertyId, { loading }] = useGetLandlordByPropertyId();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  const fetchLandlords = async ({ page = 1 }) => {
-    try {
-      // Assume getLandlordByPropertyId accepts a page parameter for pagination
-      const { landlords, totalPages } = await getLandlordByPropertyId(id); 
-      setLandlords(landlords);
-      setTotalPages(totalPages);
-    } catch (err) {
-      console.error("Error fetching landlords:", err);
-    }
-  };
+  // const fetchLandlords = async ({ page = 1 }) => {
+  //   try {
+  //     // Assume getLandlordByPropertyId accepts a page parameter for pagination
+  //     const { landlords, totalPages } = await getLandlordByPropertyId(id);
+  //     setTotalPages(totalPages);
+  //   } catch (err) {
+  //     console.error("Error fetching landlords:", err);
+  //   }
+  // };
 
   useEffect(() => {
-    fetchLandlords({ page: 1 });
+    // fetchLandlords({ page: 1 });
   }, []);
 
   const onPageChange = (page: number) => {
-    fetchLandlords({ page });
+    // fetchLandlords({ page });
     setCurrentPage(page);
   };
 
@@ -106,7 +106,6 @@ const Landlord = ({ id }: { id: string }) => {
       <Table
         data={landlords}
         columns={columns as any}
-        pagination={{ page: currentPage, total: totalPages, onPageChange }}
         handleRowClick={handleRowClick}
         loading={loading}
       />

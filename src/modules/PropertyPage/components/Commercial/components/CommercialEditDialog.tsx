@@ -33,6 +33,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/ui/select";
+import { ICommercial } from "@/models/Commercial";
 
 const commercialSchema = z.object({
   rent: z.string().refine((val) => !isNaN(parseFloat(val)), "Must be a number"),
@@ -66,7 +67,7 @@ const commercialSchema = z.object({
 type CommercialSchema = z.infer<typeof commercialSchema>;
 
 export interface CommercialEditDialogProps {
-  commercial: CommercialSchema;
+  commercial: ICommercial;
   onSubmit: (data: CommercialSchema) => void;
 }
 
@@ -86,7 +87,7 @@ const CommercialEditDialog = forwardRef<
     close: () => setIsOpen(false),
   }));
 
-  const form = useForm<CommercialSchema>({
+  const form = useForm<any>({
     resolver: zodResolver(commercialSchema),
     defaultValues: {
       ...commercial,

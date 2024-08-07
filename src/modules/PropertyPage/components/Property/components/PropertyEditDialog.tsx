@@ -33,6 +33,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/ui/select";
+import { IProperty } from "@/models/Property";
 
 const propertySchema = z.object({
   status: z.enum(["Active", "Inactive"]),
@@ -73,7 +74,7 @@ const propertySchema = z.object({
 type PropertySchema = z.infer<typeof propertySchema>;
 
 export interface PropertyEditDialogProps {
-  property: PropertySchema;
+  property: IProperty;
   onSubmit: (data: PropertySchema) => void;
 }
 
@@ -93,7 +94,7 @@ const PropertyEditDialog = forwardRef<
     close: () => setIsOpen(false),
   }));
 
-  const form = useForm<PropertySchema>({
+  const form = useForm<any>({
     resolver: zodResolver(propertySchema),
     defaultValues: {
       ...property,

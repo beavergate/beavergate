@@ -26,6 +26,27 @@ export type IProperty = Document & {
   tags: string[]; // Change tags to an array of strings
 };
 
+export type IPropertyFUll = Document & {
+  _id: string;
+  status: string;
+  photos?: string[];
+  name: string;
+  address: string;
+  latitude: number | null;
+  longitude: number | null;
+  carpet_area: number | null;
+  super_built_up_area: number | null;
+  pincode: string;
+  state: string;
+  cost_centre?: string;
+  user: IUser["_id"];
+  landlords: ILandlord[];
+  commercial: ICommercial;
+  compliance: ICompliance;
+  utility: IUtility;
+  tags: string[]; // Change tags to an array of strings
+};
+
 const propertySchema: Schema = new mongoose.Schema(
   {
     status: {

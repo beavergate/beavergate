@@ -5,24 +5,14 @@ import { Button } from "@/ui/button";
 import PropertyEditDialog, {
   PropertyEditDialogHandle,
 } from "./components/PropertyEditDialog";
+import { IProperty } from "@/models/Property";
 
-const Property = ({ id }: { id: string }) => {
+type Props = {
+  property: IProperty;
+};
+
+const Property: React.FC<Props> = ({ property }) => {
   const propertyEditDialogRef = useRef<PropertyEditDialogHandle>(null);
-  const [getPropertyById, { loading, error }] = useGetPropertyById();
-  const [property, setProperty] = useState<any>(null);
-
-  useEffect(() => {
-    const fetchProperty = async () => {
-      try {
-        const data = await getPropertyById(id);
-        setProperty(data);
-      } catch (err) {
-        console.error("Error fetching property:", err);
-      }
-    };
-
-    fetchProperty();
-  }, [id]);
 
   if (!property) {
     return <div>Loading...</div>;

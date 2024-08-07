@@ -1,17 +1,39 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/ui/button";
 import { ArrowBigLeft } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import Commercial from "./components/Commercial";
 import Property from "./components/Property";
 import Landlord from "./components/Landlord";
+import { useGetPropertyById } from "@/hooks/property";
+import { IProperty, IPropertyFUll } from "@/models/Property";
 
 const PropertyPage = () => {
-  const params = useParams();
-  const id = Array.isArray(params.id) ? params.id[0] : params.id || ""; // Ensure id is a string
-  // Fetch the property data here if necessary or handle it inside the component
+  const { id } = useParams();
+
   const router = useRouter();
+
+  const [getPropertyById, { loading, error }] = useGetPropertyById();
+  const [property, setProperty] = useState<IPropertyFUll | null>(null);
+
+  useEffect(() => {
+    const fetchProperty = async () => {
+      try {
+        const data = await getPropertyById(id as string);
+        setProperty(data);
+      } catch (err) {
+        console.error("Error fetching property:", err);
+      }
+    };
+
+    fetchProperty();
+  }, [id]);
+
+  if (!property) {
+    return <div>data not found</div>;
+  }
+
   return (
     <div className="px-4">
       <div className="py-4">
@@ -25,11 +47,11 @@ const PropertyPage = () => {
         </Button>
       </div>
       <div className="flex">
-        <Property id={id} />
-        <Commercial id={id} />
+        <Property property={property} />
+        <Commercial commercial={property.commercial} />
       </div>
       <div>
-        <Landlord id={id} />
+        <Landlord landlords={property.landlords} />
       </div>
     </div>
   );

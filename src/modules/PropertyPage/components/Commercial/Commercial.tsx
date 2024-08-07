@@ -12,37 +12,19 @@ import CommercialEditDialog, {
 import CommercialAddDialog, {
   CommercialAddDialogHandle,
 } from "./components/CommercialAddDialog";
+import { ICommercial } from "@/models/Commercial";
 
-const Commercial = ({ id }: { id: string }) => {
+const Commercial = ({ commercial }: { commercial: ICommercial }) => {
   const commercialEditDialogRef = useRef<CommercialEditDialogHandle>(null);
   const addCommercialDialogRef = useRef<CommercialAddDialogHandle>(null);
 
-  const [commercial, setCommercial] = useState<any>(null);
-  const [getCommercialById, { loading, error }] =
-    useGetCommercialByPropertyId();
   const [createCommercial, { loading: creating, error: createError }] =
     useCreateCommericial();
-
-  useEffect(() => {
-    const fetchCommercial = async () => {
-      try {
-        const data = await getCommercialById(id);
-        if (data?.success) {
-          setCommercial(data.commercial);
-        }
-      } catch (err) {
-        console.error("Error fetching commercial property:", err);
-      }
-    };
-
-    fetchCommercial();
-  }, [id]);
 
   const handleAddCommercial = async (data: any) => {
     try {
       const response = await createCommercial(data);
       if (response) {
-        setCommercial(response.data);
         console.log("Commercial property created:", response.data);
       }
     } catch (err) {
@@ -90,9 +72,9 @@ const Commercial = ({ id }: { id: string }) => {
     { label: "Tenure", value: commercial?.tenure },
   ];
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  // if (loading) {
+  //   return <div>Loading...</div>;
+  // }
 
   return (
     <>
@@ -100,14 +82,12 @@ const Commercial = ({ id }: { id: string }) => {
         ref={commercialEditDialogRef}
         commercial={commercial}
         onSubmit={(data) => {
-          setCommercial(data);
           commercialEditDialogRef.current?.close();
         }}
       />
       <CommercialAddDialog
         ref={addCommercialDialogRef}
         onSubmit={(data) => {
-          handleAddCommercial({ ...data, property: id });
           addCommercialDialogRef.current?.close();
         }}
       />

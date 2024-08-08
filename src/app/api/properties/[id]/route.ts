@@ -14,9 +14,18 @@ export async function GET(
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json({ message: "Invalid ID" }, { status: 400 });
     }
-    const property = await Property.findById(id);
+    const property = await Property.findById(id)
+      .populate("landlords")
+      .populate("commercial")
+      .populate("compliance")
+      .populate("utility")
+      .exec();
+
     if (!property) {
-      return NextResponse.json({ message: "Property not found" }, { status: 404 });
+      return NextResponse.json(
+        { message: "Property not found" },
+        { status: 404 }
+      );
     }
     return NextResponse.json(property, { status: 200 });
   } catch (error: any) {
@@ -41,7 +50,10 @@ export async function PUT(
       runValidators: true,
     });
     if (!property) {
-      return NextResponse.json({ message: "Property not found" }, { status: 404 });
+      return NextResponse.json(
+        { message: "Property not found" },
+        { status: 404 }
+      );
     }
     return NextResponse.json(property, { status: 200 });
   } catch (error: any) {

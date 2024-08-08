@@ -1,9 +1,9 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 import { IUser } from "./User";
-import { ILandlord } from "./Landlord";
-import { ICommercial } from "./Commercial";
-import { ICompliance } from "./Compliance";
-import { IUtility } from "./Utility";
+import Landlord, { ILandlord } from "./Landlord";
+import Commercial, { ICommercial } from "./Commercial";
+import Compliance, { ICompliance } from "./Compliance";
+import Utility, { IUtility } from "./Utility";
 
 export type IProperty = Document & {
   _id: string;
@@ -23,6 +23,27 @@ export type IProperty = Document & {
   commercial: ICommercial["_id"];
   compliance: ICompliance["_id"];
   utility: IUtility["_id"];
+  tags: string[]; // Change tags to an array of strings
+};
+
+export type IPropertyFUll = Document & {
+  _id: string;
+  status: string;
+  photos?: string[];
+  name: string;
+  address: string;
+  latitude: number | null;
+  longitude: number | null;
+  carpet_area: number | null;
+  super_built_up_area: number | null;
+  pincode: string;
+  state: string;
+  cost_centre?: string;
+  user: IUser["_id"];
+  landlords: ILandlord[];
+  commercial: ICommercial;
+  compliance: ICompliance;
+  utility: IUtility;
   tags: string[]; // Change tags to an array of strings
 };
 
@@ -87,19 +108,23 @@ const propertySchema: Schema = new mongoose.Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Landlord",
+        required: true,
       },
     ],
     commercial: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Commercial",
+      required: true,
     },
     compliance: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Compliance",
+      required: true,
     },
     utility: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Utility",
+      required: true,
     },
 
     user: {

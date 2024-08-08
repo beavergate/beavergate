@@ -7,7 +7,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -23,69 +22,48 @@ import {
   FormLabel,
   FormMessage,
 } from "@/ui/form";
-
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/ui/select";
+import { IUtility } from "@/models/Utility";
 
-const propertySchema = z.object({
-  status: z.enum(["Active", "Inactive"]),
-  address: z.string().nonempty("Address is required"),
-  latitude: z.union([
+const utilitySchema = z.object({
+  electricity_board: z.string().optional(),
+  electricity_consumer_number: z.string().optional(),
+  electricity_bill_amount: z.union([
     z
       .string()
       .refine((val) => !isNaN(parseFloat(val)), "Must be a number")
       .nullable(),
     z.number().nullable(),
   ]),
-  longitude: z.union([
+  water_board: z.string().optional(),
+  water_consumer_number: z.string().optional(),
+  water_bill_amount: z.union([
     z
       .string()
       .refine((val) => !isNaN(parseFloat(val)), "Must be a number")
       .nullable(),
     z.number().nullable(),
   ]),
-  carpet_area: z.union([
-    z
-      .string()
-      .refine((val) => !isNaN(parseFloat(val)), "Must be a number")
-      .nullable(),
-    z.number().nullable(),
-  ]),
-  super_built_up_area: z.union([
-    z
-      .string()
-      .refine((val) => !isNaN(parseFloat(val)), "Must be a number")
-      .nullable(),
-    z.number().nullable(),
-  ]),
-  pincode: z.string().nonempty("Pincode is required"),
-  state: z.string().nonempty("State is required"),
-  cost_centre: z.string().nullable(),
+  type: z.string().nonempty("Type is required"),
 });
 
-type PropertySchema = z.infer<typeof propertySchema>;
+type UtilitySchema = z.infer<typeof utilitySchema>;
 
-export interface PropertyEditDialogProps {
-  property: PropertySchema;
-  onSubmit: (data: PropertySchema) => void;
+export interface UtilityEditDialogProps {
+  utility: IUtility;
+  onSubmit: (data: UtilitySchema) => void;
 }
 
-export interface PropertyEditDialogHandle {
+export interface UtilityEditDialogHandle {
   open: () => void;
   close: () => void;
 }
 
-const PropertyEditDialog = forwardRef<
-  PropertyEditDialogHandle,
-  PropertyEditDialogProps
->(({ property, onSubmit }, ref) => {
+const UtilityEditDialog = forwardRef<
+  UtilityEditDialogHandle,
+  UtilityEditDialogProps
+>(({ utility, onSubmit }, ref) => {
   const [isOpen, setIsOpen] = useState(false);
 
   useImperativeHandle(ref, () => ({
@@ -93,29 +71,23 @@ const PropertyEditDialog = forwardRef<
     close: () => setIsOpen(false),
   }));
 
-  const form = useForm<PropertySchema>({
-    resolver: zodResolver(propertySchema),
+  const form = useForm<UtilitySchema>({
+    resolver: zodResolver(utilitySchema),
     defaultValues: {
-      ...property,
-      latitude: property.latitude ?? "",
-      longitude: property.longitude ?? "",
-      carpet_area: property.carpet_area ?? "",
-      super_built_up_area: property.super_built_up_area ?? "",
-      cost_centre: property.cost_centre ?? "",
+      ...utility,
     },
   });
 
   const convertNullToEmptyString = (value: any) =>
-    value === null ? "" : value;
+    value === null || value === undefined ? "" : value;
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edit Property Details</DialogTitle>
+          <DialogTitle>Edit Utility Details</DialogTitle>
           <DialogDescription>
-            Make changes to the property details and click save when you're
-            done.
+            Make changes to the utility details and click save when you're done.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -123,147 +95,128 @@ const PropertyEditDialog = forwardRef<
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
-                name="status"
+                name="electricity_board"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Status</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select status" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Active">Active</SelectItem>
-                          <SelectItem value="Inactive">Inactive</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="address"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Address</FormLabel>
-                    <FormControl>
-                      <Input type="text" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="latitude"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Latitude</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        {...field}
-                        value={convertNullToEmptyString(field.value)}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="longitude"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Longitude</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        {...field}
-                        value={convertNullToEmptyString(field.value)}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="carpet_area"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Carpet Area</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        {...field}
-                        value={convertNullToEmptyString(field.value)}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="super_built_up_area"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Super Built-up Area</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        {...field}
-                        value={convertNullToEmptyString(field.value)}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="pincode"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Pincode</FormLabel>
-                    <FormControl>
-                      <Input type="text" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="state"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>State</FormLabel>
-                    <FormControl>
-                      <Input type="text" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="cost_centre"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Cost Centre</FormLabel>
+                    <FormLabel>Electricity Board</FormLabel>
                     <FormControl>
                       <Input
                         type="text"
                         {...field}
                         value={convertNullToEmptyString(field.value)}
                       />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="electricity_consumer_number"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Electricity Consumer Number</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        {...field}
+                        value={convertNullToEmptyString(field.value)}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="electricity_bill_amount"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Electricity Bill Amount</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        {...field}
+                        value={field.value === null ? "" : String(field.value)}
+                        onChange={(e) =>
+                          field.onChange(
+                            e.target.value === ""
+                              ? null
+                              : Number(e.target.value)
+                          )
+                        }
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="water_board"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Water Board</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        {...field}
+                        value={convertNullToEmptyString(field.value)}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="water_consumer_number"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Water Consumer Number</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        {...field}
+                        value={convertNullToEmptyString(field.value)}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="water_bill_amount"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Water Bill Amount</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        {...field}
+                        value={field.value === null ? "" : String(field.value)}
+                        onChange={(e) =>
+                          field.onChange(
+                            e.target.value === ""
+                              ? null
+                              : Number(e.target.value)
+                          )
+                        }
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="type"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Type</FormLabel>
+                    <FormControl>
+                      <Input type="text" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -283,6 +236,6 @@ const PropertyEditDialog = forwardRef<
   );
 });
 
-PropertyEditDialog.displayName = "PropertyEditDialog";
+UtilityEditDialog.displayName = "UtilityEditDialog";
 
-export default PropertyEditDialog;
+export default UtilityEditDialog;

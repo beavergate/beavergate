@@ -1,37 +1,14 @@
-/* eslint-disable @next/next/no-async-client-component */
-
 "use client";
 
-import { Button } from "@/ui/button";
-import { ArrowBigLeft } from "lucide-react";
-import Commercial from "modules/Commercial";
-import Property from "modules/Property";
-import { useRouter, useSearchParams } from "next/navigation";
 import React from "react";
+import { useParams } from "next/navigation";
+import PropertyModule from "modules/PropertyPage";
 
-const PropertyPage = async () => {
-  const searchParams = useSearchParams();
-  const id = searchParams.get("id") as string;
-  // Fetch the property data here if necessary or handle it inside the component
-  const router = useRouter();
-
+const PropertyPage = () => {
   return (
-    <div className="px-4">
-      <div className="py-4">
-        <Button
-          className="rounded-md"
-          onClick={() => {
-            router.back();
-          }}
-        >
-          <ArrowBigLeft /> Back
-        </Button>
-      </div>
-      <div className="flex gap-4">
-        <Property id={id} />
-        <Commercial id={id} />
-      </div>
-    </div>
+    <>
+      <PropertyModule/>
+    </>
   );
 };
 

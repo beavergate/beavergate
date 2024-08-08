@@ -16,7 +16,6 @@ export type ILandlord = Document & {
   aadhaar_card_attachment?: string;
   cancelled_cheque_attachment?: string;
   vendor_code?: string;
-  property: IProperty["_id"]; 
 };
 
 const landlordSchema: Schema = new mongoose.Schema(
@@ -64,10 +63,6 @@ const landlordSchema: Schema = new mongoose.Schema(
     vendor_code: {
       type: String,
     },
-    property: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Property",
-    },
   },
   {
     timestamps: true,
@@ -75,6 +70,7 @@ const landlordSchema: Schema = new mongoose.Schema(
 );
 
 const Landlord: Model<ILandlord> =
-  mongoose.models.Landlord || mongoose.model<ILandlord>("Landlord", landlordSchema);
+  mongoose.models.Landlord ||
+  mongoose.model<ILandlord>("Landlord", landlordSchema);
 
 export default Landlord;

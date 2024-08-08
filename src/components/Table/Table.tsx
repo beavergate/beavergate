@@ -28,7 +28,7 @@ import { PaginationProps } from "../Pagination/Pagination";
 interface TableProps<TData> {
   data: TData[];
   columns: ColumnDef<TData, any>[];
-  pagination: PaginationProps;
+  pagination?: PaginationProps;
   handleRowClick?: (row: TData) => void;
   customHeader?: React.ReactNode;
   tableClassName?: string;
@@ -52,7 +52,11 @@ const Table = forwardRef(
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = useState({});
     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
-    const { page, total, onPageChange } = pagination;
+    const { page, total, onPageChange } = pagination || {
+      page: 1,
+      total: 0,
+      onPageChange: () => {},
+    };
 
     const table = useReactTable<TData>({
       data,
@@ -71,7 +75,6 @@ const Table = forwardRef(
         rowSelection,
       },
     });
-
     // Expose the table instance to the parent component
     useImperativeHandle(ref, () => ({
       table,
@@ -149,7 +152,13 @@ const Table = forwardRef(
             </BaseTable>
           )}
           <div>
-            <Pagination page={page} total={total} onPageChange={onPageChange} />
+            {pagination && (
+              <Pagination
+                page={page}
+                total={total}
+                onPageChange={onPageChange}
+              />
+            )}
           </div>
         </div>
       </div>

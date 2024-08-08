@@ -33,32 +33,50 @@ import {
   SelectContent,
   SelectItem,
 } from "@/ui/select";
+import { ICommercial } from "@/models/Commercial";
 
 const commercialSchema = z.object({
-  rent: z
-    .string()
-    .refine((val) => !isNaN(parseFloat(val)), "Must be a number"),
-  security_deposit: z
-    .string()
-    .refine((val) => !isNaN(parseFloat(val)), "Must be a number"),
+  rent: z.union([
+    z
+      .string()
+      .refine((val) => !isNaN(parseFloat(val)), "Must be a number")
+      .nullable(),
+    z.number().nullable(),
+  ]),
+  security_deposit: z.union([
+    z
+      .string()
+      .refine((val) => !isNaN(parseFloat(val)), "Must be a number")
+      .nullable(),
+    z.number().nullable(),
+  ]),
   start_date: z.string().nonempty("Start date is required"),
   end_date: z.string().nonempty("End date is required"),
-  lockin: z
-    .string()
-    .refine((val) => !isNaN(parseFloat(val)), "Must be a number")
-    .nullable(),
-  notice_period: z
-    .string()
-    .refine((val) => !isNaN(parseFloat(val)), "Must be a number")
-    .nullable(),
+  lockin: z.union([
+    z
+      .string()
+      .refine((val) => !isNaN(parseFloat(val)), "Must be a number")
+      .nullable(),
+    z.number().nullable(),
+  ]),
+  notice_period: z.union([
+    z
+      .string()
+      .refine((val) => !isNaN(parseFloat(val)), "Must be a number")
+      .nullable(),
+    z.number().nullable(),
+  ]),
   rent_payment_date: z.string().nullable(),
   rent_payment_frequency: z.string().nullable(),
   escalation_clause: z.string().nullable(),
   deductibles: z.string().nullable(),
-  rent_free_period: z
-    .string()
-    .refine((val) => !isNaN(parseFloat(val)), "Must be a number")
-    .nullable(),
+  rent_free_period: z.union([
+    z
+      .string()
+      .refine((val) => !isNaN(parseFloat(val)), "Must be a number")
+      .nullable(),
+    z.number().nullable(),
+  ]),
   delayed_payments_interest: z.string().nullable(),
   lesser_scope_of_work: z.string().nullable(),
   lessee_scope_of_work: z.string().nullable(),
@@ -68,7 +86,7 @@ const commercialSchema = z.object({
 type CommercialSchema = z.infer<typeof commercialSchema>;
 
 export interface CommercialEditDialogProps {
-  commercial: CommercialSchema;
+  commercial: ICommercial;
   onSubmit: (data: CommercialSchema) => void;
 }
 
@@ -88,7 +106,7 @@ const CommercialEditDialog = forwardRef<
     close: () => setIsOpen(false),
   }));
 
-  const form = useForm<CommercialSchema>({
+  const form = useForm<any>({
     resolver: zodResolver(commercialSchema),
     defaultValues: {
       ...commercial,
@@ -118,11 +136,7 @@ const CommercialEditDialog = forwardRef<
                   <FormItem>
                     <FormLabel>Rent</FormLabel>
                     <FormControl>
-                      <Input
-                        type="number"
-                        {...field}
-                        value={convertNullToEmptyString(field.value)}
-                      />
+                      <Input type="number" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -135,11 +149,7 @@ const CommercialEditDialog = forwardRef<
                   <FormItem>
                     <FormLabel>Security Deposit</FormLabel>
                     <FormControl>
-                      <Input
-                        type="number"
-                        {...field}
-                        value={convertNullToEmptyString(field.value)}
-                      />
+                      <Input type="number" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -178,11 +188,7 @@ const CommercialEditDialog = forwardRef<
                   <FormItem>
                     <FormLabel>Lockin Period</FormLabel>
                     <FormControl>
-                      <Input
-                        type="number"
-                        {...field}
-                        value={convertNullToEmptyString(field.value)}
-                      />
+                      <Input type="number" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -195,11 +201,7 @@ const CommercialEditDialog = forwardRef<
                   <FormItem>
                     <FormLabel>Notice Period</FormLabel>
                     <FormControl>
-                      <Input
-                        type="number"
-                        {...field}
-                        value={convertNullToEmptyString(field.value)}
-                      />
+                      <Input type="number" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -212,7 +214,11 @@ const CommercialEditDialog = forwardRef<
                   <FormItem>
                     <FormLabel>Rent Payment Date</FormLabel>
                     <FormControl>
-                      <Input type="date" {...field} value={convertNullToEmptyString(field.value)} />
+                      <Input
+                        type="date"
+                        {...field}
+                        value={convertNullToEmptyString(field.value)}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -242,7 +248,11 @@ const CommercialEditDialog = forwardRef<
                   <FormItem>
                     <FormLabel>Escalation Clause</FormLabel>
                     <FormControl>
-                      <Input type="text" {...field} value={convertNullToEmptyString(field.value)} />
+                      <Input
+                        type="text"
+                        {...field}
+                        value={convertNullToEmptyString(field.value)}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -255,7 +265,11 @@ const CommercialEditDialog = forwardRef<
                   <FormItem>
                     <FormLabel>Deductibles</FormLabel>
                     <FormControl>
-                      <Input type="text" {...field} value={convertNullToEmptyString(field.value)} />
+                      <Input
+                        type="text"
+                        {...field}
+                        value={convertNullToEmptyString(field.value)}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -268,11 +282,7 @@ const CommercialEditDialog = forwardRef<
                   <FormItem>
                     <FormLabel>Rent Free Period</FormLabel>
                     <FormControl>
-                      <Input
-                        type="number"
-                        {...field}
-                        value={convertNullToEmptyString(field.value)}
-                      />
+                      <Input type="number" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -285,7 +295,11 @@ const CommercialEditDialog = forwardRef<
                   <FormItem>
                     <FormLabel>Delayed Payments Interest</FormLabel>
                     <FormControl>
-                      <Input type="text" {...field} value={convertNullToEmptyString(field.value)} />
+                      <Input
+                        type="text"
+                        {...field}
+                        value={convertNullToEmptyString(field.value)}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -298,7 +312,11 @@ const CommercialEditDialog = forwardRef<
                   <FormItem>
                     <FormLabel>Lesser Scope of Work</FormLabel>
                     <FormControl>
-                      <Input type="text" {...field} value={convertNullToEmptyString(field.value)} />
+                      <Input
+                        type="text"
+                        {...field}
+                        value={convertNullToEmptyString(field.value)}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -311,7 +329,11 @@ const CommercialEditDialog = forwardRef<
                   <FormItem>
                     <FormLabel>Lessee Scope of Work</FormLabel>
                     <FormControl>
-                      <Input type="text" {...field} value={convertNullToEmptyString(field.value)} />
+                      <Input
+                        type="text"
+                        {...field}
+                        value={convertNullToEmptyString(field.value)}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -324,7 +346,11 @@ const CommercialEditDialog = forwardRef<
                   <FormItem>
                     <FormLabel>Tenure</FormLabel>
                     <FormControl>
-                      <Input type="text" {...field} value={convertNullToEmptyString(field.value)} />
+                      <Input
+                        type="text"
+                        {...field}
+                        value={convertNullToEmptyString(field.value)}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

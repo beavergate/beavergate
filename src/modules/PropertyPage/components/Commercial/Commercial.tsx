@@ -1,36 +1,32 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import { Button } from "@/ui/button";
-import {
-  useCreateCommericial,
-  useGetCommercialByPropertyId,
-} from "@/hooks/commercial";
 import CommercialEditDialog, {
   CommercialEditDialogHandle,
 } from "./components/CommercialEditDialog";
-import CommercialAddDialog, {
-  CommercialAddDialogHandle,
-} from "./components/CommercialAddDialog";
+// import CommercialAddDialog, {
+//   CommercialAddDialogHandle,
+// } from "./components/CommercialAddDialog";
 import { ICommercial } from "@/models/Commercial";
 
 const Commercial = ({ commercial }: { commercial: ICommercial }) => {
   const commercialEditDialogRef = useRef<CommercialEditDialogHandle>(null);
-  const addCommercialDialogRef = useRef<CommercialAddDialogHandle>(null);
+  // const addCommercialDialogRef = useRef<CommercialAddDialogHandle>(null);
 
-  const [createCommercial, { loading: creating, error: createError }] =
-    useCreateCommericial();
+  // const [createCommercial, { loading: creating, error: createError }] =
+  //   useCreateCommericial();
 
-  const handleAddCommercial = async (data: any) => {
-    try {
-      const response = await createCommercial(data);
-      if (response) {
-        console.log("Commercial property created:", response.data);
-      }
-    } catch (err) {
-      console.error("Error creating commercial property:", err);
-    }
-  };
+  // const handleAddCommercial = async (data: any) => {
+  //   try {
+  //     const response = await createCommercial(data);
+  //     if (response) {
+  //       console.log("Commercial property created:", response.data);
+  //     }
+  //   } catch (err) {
+  //     console.error("Error creating commercial property:", err);
+  //   }
+  // };
 
   // Array of commercial fields to display
   const commercialFields = [
@@ -72,10 +68,6 @@ const Commercial = ({ commercial }: { commercial: ICommercial }) => {
     { label: "Tenure", value: commercial?.tenure },
   ];
 
-  // if (loading) {
-  //   return <div>Loading...</div>;
-  // }
-
   return (
     <>
       <CommercialEditDialog
@@ -85,12 +77,12 @@ const Commercial = ({ commercial }: { commercial: ICommercial }) => {
           commercialEditDialogRef.current?.close();
         }}
       />
-      <CommercialAddDialog
+      {/* <CommercialAddDialog
         ref={addCommercialDialogRef}
         onSubmit={(data) => {
           addCommercialDialogRef.current?.close();
         }}
-      />
+      /> */}
 
       {commercial ? (
         <div className="flex flex-col md:flex-row p-8 rounded-lg space-y-6 md:space-y-0 md:space-x-8">
@@ -100,8 +92,7 @@ const Commercial = ({ commercial }: { commercial: ICommercial }) => {
               <Button
                 className="absolute top-2 right-2 text-white rounded-md"
                 onClick={() => {
-                  // commercialEditDialogRef.current?.open();
-                  console.log("Edit commercial");
+                  commercialEditDialogRef.current?.open();
                 }}
               >
                 Edit
@@ -120,14 +111,14 @@ const Commercial = ({ commercial }: { commercial: ICommercial }) => {
         <div className="flex p-8 rounded-lg space-y-6 md:space-y-0 md:space-x-8">
           <div className="flex flex-col justify-center items-center bg-white p-6 rounded-lg shadow-md md:w-full">
             <h2 className="text-lg font-semibold mb-4">No Commercials Found</h2>
-            <Button
+            {/* <Button
               onClick={() => {
                 addCommercialDialogRef.current?.open();
               }}
               className="text-white rounded-md"
             >
               Add Commercial Property
-            </Button>
+            </Button> */}
           </div>
         </div>
       )}

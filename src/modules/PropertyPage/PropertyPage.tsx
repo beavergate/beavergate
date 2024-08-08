@@ -8,6 +8,10 @@ import Property from "./components/Property";
 import Landlord from "./components/Landlord";
 import { useGetPropertyById } from "@/hooks/property";
 import { IProperty, IPropertyFUll } from "@/models/Property";
+import Compliance from "./components/Compliance";
+import Utility from "./components/Utility";
+import ProfileCard from "./components/ProfileCard";
+import Loader from "@/components/Loader";
 
 const PropertyPage = () => {
   const { id } = useParams();
@@ -31,11 +35,11 @@ const PropertyPage = () => {
   }, [id]);
 
   if (!property) {
-    return <div>data not found</div>;
+    return <Loader />;
   }
 
   return (
-    <div className="px-4">
+    <div className="container mx-auto px-4">
       <div className="py-4">
         <Button
           className="rounded-md"
@@ -46,12 +50,21 @@ const PropertyPage = () => {
           <ArrowBigLeft /> Back
         </Button>
       </div>
-      <div className="flex">
+      <div className="flex justify-evenly">
+        <ProfileCard />
         <Property property={property} />
-        <Commercial commercial={property.commercial} />
+      </div>
+      <div className="flex">
+        <div className="flex justify-evenly">
+          <Commercial commercial={property.commercial} />
+        </div>
+        <div>
+          <Compliance compliance={property.compliance} />
+          <Utility utility={property.utility} />
+        </div>
       </div>
       <div>
-        <Landlord landlords={property.landlords} />
+        <Landlord landlordsData={property.landlords} />
       </div>
     </div>
   );

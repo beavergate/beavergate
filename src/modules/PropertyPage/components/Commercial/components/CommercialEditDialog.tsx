@@ -36,28 +36,47 @@ import {
 import { ICommercial } from "@/models/Commercial";
 
 const commercialSchema = z.object({
-  rent: z.string().refine((val) => !isNaN(parseFloat(val)), "Must be a number"),
-  security_deposit: z
-    .string()
-    .refine((val) => !isNaN(parseFloat(val)), "Must be a number"),
+  rent: z.union([
+    z
+      .string()
+      .refine((val) => !isNaN(parseFloat(val)), "Must be a number")
+      .nullable(),
+    z.number().nullable(),
+  ]),
+  security_deposit: z.union([
+    z
+      .string()
+      .refine((val) => !isNaN(parseFloat(val)), "Must be a number")
+      .nullable(),
+    z.number().nullable(),
+  ]),
   start_date: z.string().nonempty("Start date is required"),
   end_date: z.string().nonempty("End date is required"),
-  lockin: z
-    .string()
-    .refine((val) => !isNaN(parseFloat(val)), "Must be a number")
-    .nullable(),
-  notice_period: z
-    .string()
-    .refine((val) => !isNaN(parseFloat(val)), "Must be a number")
-    .nullable(),
+  lockin: z.union([
+    z
+      .string()
+      .refine((val) => !isNaN(parseFloat(val)), "Must be a number")
+      .nullable(),
+    z.number().nullable(),
+  ]),
+  notice_period: z.union([
+    z
+      .string()
+      .refine((val) => !isNaN(parseFloat(val)), "Must be a number")
+      .nullable(),
+    z.number().nullable(),
+  ]),
   rent_payment_date: z.string().nullable(),
   rent_payment_frequency: z.string().nullable(),
   escalation_clause: z.string().nullable(),
   deductibles: z.string().nullable(),
-  rent_free_period: z
-    .string()
-    .refine((val) => !isNaN(parseFloat(val)), "Must be a number")
-    .nullable(),
+  rent_free_period: z.union([
+    z
+      .string()
+      .refine((val) => !isNaN(parseFloat(val)), "Must be a number")
+      .nullable(),
+    z.number().nullable(),
+  ]),
   delayed_payments_interest: z.string().nullable(),
   lesser_scope_of_work: z.string().nullable(),
   lessee_scope_of_work: z.string().nullable(),
@@ -117,11 +136,7 @@ const CommercialEditDialog = forwardRef<
                   <FormItem>
                     <FormLabel>Rent</FormLabel>
                     <FormControl>
-                      <Input
-                        type="number"
-                        {...field}
-                        value={convertNullToEmptyString(field.value)}
-                      />
+                      <Input type="number" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -134,11 +149,7 @@ const CommercialEditDialog = forwardRef<
                   <FormItem>
                     <FormLabel>Security Deposit</FormLabel>
                     <FormControl>
-                      <Input
-                        type="number"
-                        {...field}
-                        value={convertNullToEmptyString(field.value)}
-                      />
+                      <Input type="number" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -177,11 +188,7 @@ const CommercialEditDialog = forwardRef<
                   <FormItem>
                     <FormLabel>Lockin Period</FormLabel>
                     <FormControl>
-                      <Input
-                        type="number"
-                        {...field}
-                        value={convertNullToEmptyString(field.value)}
-                      />
+                      <Input type="number" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -194,11 +201,7 @@ const CommercialEditDialog = forwardRef<
                   <FormItem>
                     <FormLabel>Notice Period</FormLabel>
                     <FormControl>
-                      <Input
-                        type="number"
-                        {...field}
-                        value={convertNullToEmptyString(field.value)}
-                      />
+                      <Input type="number" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -279,11 +282,7 @@ const CommercialEditDialog = forwardRef<
                   <FormItem>
                     <FormLabel>Rent Free Period</FormLabel>
                     <FormControl>
-                      <Input
-                        type="number"
-                        {...field}
-                        value={convertNullToEmptyString(field.value)}
-                      />
+                      <Input type="number" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

@@ -75,7 +75,6 @@ const Table = forwardRef(
         rowSelection,
       },
     });
-
     // Expose the table instance to the parent component
     useImperativeHandle(ref, () => ({
       table,

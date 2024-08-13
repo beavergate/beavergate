@@ -8,36 +8,53 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { ColumnDef } from "@tanstack/react-table";
-import { useRouter } from "next/navigation";
-import { useGlobalState } from "@/context/GlobalStateContext";
-import { useGetLandlordByPropertyId } from "@/hooks/landlord";
+import { usePathname, useRouter } from "next/navigation";
 import { ILandlord } from "@/models/Landlord";
 
-const Landlord = ({ landlords }: { landlords: ILandlord[] }) => {
+const parseLandlords = ([data]: any) => {
+  const names = data.name?.split(", ");
+  if (names?.length === 1) {
+    return [data]; // Return data as a single landlord object if no comma is found
+  }
+  const bankNames = data.bank_name?.split(", ");
+  const bankAccountNumbers = data.bank_account_number?.split(", ");
+  const bankIfsc = data.bank_ifsc?.split(", ");
+  const pans = data.pan?.split(", ");
+  const aadhaarCardNumbers = data.aadhaar_card_number?.split(", ");
+  const contactEmails = data.contact_email?.split(", ");
+  const contactNumbers = data.contact_number?.split(", ");
+  const gstins = data.gstin?.split(", ");
+  const landlordAddresses = data.landlord_registered_address?.split(", ");
+  const aadhaarCardAttachments = data.aadhaar_card_attachment?.split(", ");
+  const panAttachments = data.pan_attachment?.split(", ");
+
+  return names?.map((name: any, index: any) => ({
+    name,
+    bank_name: bankNames[index] || "",
+    bank_account_number: bankAccountNumbers[index] || "",
+    bank_ifsc: bankIfsc[index] || "",
+    pan: pans[index] || "",
+    aadhaar_card_number: aadhaarCardNumbers[index] || "",
+    contact_email: contactEmails[index] || "",
+    contact_number: contactNumbers[index] || "",
+    gstin: gstins[index] || "",
+    landlord_registered_address: landlordAddresses[index] || "",
+    aadhaar_card_attachment: aadhaarCardAttachments[index] || "",
+    pan_attachment: panAttachments[index] || "",
+    createdAt: data.createdAt,
+    updatedAt: data.updatedAt,
+    vendor_code: data.vendor_code,
+  }));
+};
+
+const Landlord = ({ landlordsData }: { landlordsData: ILandlord[] }) => {
   const router = useRouter();
-
-  const [getLandlordByPropertyId, { loading }] = useGetLandlordByPropertyId();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-
-  // const fetchLandlords = async ({ page = 1 }) => {
-  //   try {
-  //     // Assume getLandlordByPropertyId accepts a page parameter for pagination
-  //     const { landlords, totalPages } = await getLandlordByPropertyId(id);
-  //     setTotalPages(totalPages);
-  //   } catch (err) {
-  //     console.error("Error fetching landlords:", err);
-  //   }
-  // };
-
+  const pathname = usePathname(); 
+  const [landlords, setLandlords] = useState<ILandlord[]>([]);
   useEffect(() => {
-    // fetchLandlords({ page: 1 });
-  }, []);
-
-  const onPageChange = (page: number) => {
-    // fetchLandlords({ page });
-    setCurrentPage(page);
-  };
+    const parsedLandlords = parseLandlords(landlordsData);
+    setLandlords(parsedLandlords);
+  }, [landlordsData]);
 
   const columns: ColumnDef<any>[] = [
     {
@@ -97,7 +114,7 @@ const Landlord = ({ landlords }: { landlords: ILandlord[] }) => {
   ];
 
   const handleRowClick = (data: any) => {
-    router.push(`/landlords/${data?._id}`);
+    router.push(`${pathname}/landlords/${data?._id}`);
   };
 
   return (
@@ -107,7 +124,6 @@ const Landlord = ({ landlords }: { landlords: ILandlord[] }) => {
         data={landlords}
         columns={columns as any}
         handleRowClick={handleRowClick}
-        loading={loading}
       />
     </div>
   );

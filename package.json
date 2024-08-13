@@ -7,18 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "dev:clean": "rm -rf node_modules yarn.lock && yarn && yarn dev",
-    "docker:dev": "docker-compose -f docker-compose.dev.yml up",
-    "docker:dev:build": "docker-compose -f docker-compose.dev.yml build",
-    "docker:dev:logs": "docker-compose -f docker-compose.dev.yml logs -f",
-    "docker:dev:down": "docker-compose -f docker-compose.dev.yml down",
-    "docker:prod": "docker-compose -f docker-compose.prod.yml up -d",
-    "docker:prod:build": "docker-compose -f docker-compose.prod.yml build",
-    "docker:prod:push": "docker-compose -f docker-compose.prod.yml push",
-    "docker:prod:pull": "docker-compose -f docker-compose.prod.yml pull",
-    "docker:prod:rm": "docker-compose -f docker-compose.prod.yml down",
-    "docker:prod:logs": "docker-compose -f docker-compose.prod.yml logs -f",
-    "docker:prod:down": "docker-compose -f docker-compose.prod.yml down"
+    "dev:clean": "rm -rf node_modules yarn.lock && yarn && yarn dev"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.608.0",

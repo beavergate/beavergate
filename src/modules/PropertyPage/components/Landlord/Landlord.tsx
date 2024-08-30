@@ -49,11 +49,13 @@ const parseLandlords = ([data]: any) => {
 
 const Landlord = ({ landlordsData }: { landlordsData: ILandlord[] }) => {
   const router = useRouter();
-  const pathname = usePathname(); 
+  const pathname = usePathname();
   const [landlords, setLandlords] = useState<ILandlord[]>([]);
   useEffect(() => {
-    const parsedLandlords = parseLandlords(landlordsData);
-    setLandlords(parsedLandlords);
+    if (landlordsData) {
+      const parsedLandlords = parseLandlords(landlordsData);
+      setLandlords(parsedLandlords);
+    }
   }, [landlordsData]);
 
   const columns: ColumnDef<any>[] = [

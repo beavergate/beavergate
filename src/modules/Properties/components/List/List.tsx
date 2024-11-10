@@ -122,8 +122,7 @@ const List: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-semibold mb-4">Properties</h1>
+    <div className="container mx-auto p-0">
       <Table
         data={properties}
         columns={columns as any}

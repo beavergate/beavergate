@@ -13,15 +13,21 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import registerCoverImage from "assets/container.png";
+import logo from "assets/logo.png";
+import Image from "next/image";
 import { FcGoogle } from "react-icons/fc";
 import SeperatorWithName from "@/components/SeperatorWithName";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRegister } from "@/hooks/auth";
 import { useRouter } from "next/navigation";
+import PasswordInput from "@/components/PasswordInput";
 
 const registerSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters" }),
+  dateOfBirth: z.string().min(1, { message: "Date of birth is required" }),
   email: z.string().email({ message: "Invalid email address" }),
   password: z
     .string()
@@ -37,6 +43,12 @@ const Register: React.FC = () => {
 
   const form = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
+    defaultValues: {
+      name: "",
+      dateOfBirth: "",
+      email: "",
+      password: "",
+    },
   });
 
   const onSubmit = async (data: RegisterSchema) => {
@@ -62,99 +74,128 @@ const Register: React.FC = () => {
 
   if (!session) {
     return (
-      <div className="flex flex-col justify-center items-center min-h-screen bg-gray-100 dark:bg-gray-900">
-        <div className="w-full max-w-sm">
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="space-y-8 bg-white dark:bg-gray-800 p-6 rounded shadow-md"
-            >
-              <h1 className="text-xl font-semibold text-center mb-4">
-                Register
-              </h1>
-
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <Input type="text" placeholder="Your name" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="email"
-                        placeholder="you@example.com"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="Your password"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Registering..." : "Register"}
-              </Button>
-
-              {error && (
-                <p className="text-red-500 text-center mt-4">{error}</p>
-              )}
-
+      <div className="grid min-h-screen lg:grid-cols-2">
+        <div className="px-6 py-12 lg:px-8 xl:px-12">
+          <div className="flex items-center">
+            <Image src={logo} alt="Logo" />
+          </div>
+          <div className="mx-auto mt-12 max-w-md">
+            <div className="space-y-2">
+              <h1 className="text-2xl font-semibold tracking-tight">Sign up</h1>
+              <p className="text-sm text-muted-foreground">
+                Sign up to enjoy the features of Revolutie
+              </p>
+            </div>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="mt-8 space-y-4"
+              >
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Your Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Jonas Khanwald" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="dateOfBirth"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Date of Birth</FormLabel>
+                      <FormControl>
+                        <Input type="date" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="email"
+                          placeholder="jonas_khanwald@gmail.com"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <PasswordInput placeholder="Password" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button
+                  type="submit"
+                  className="w-full bg-[#367AFF]"
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <>
+                      {/* <Icons.spinner className="mr-2 h-4 w-4 animate-spin" /> */}
+                      Please wait
+                    </>
+                  ) : (
+                    "Sign up"
+                  )}
+                </Button>
+              </form>
+            </Form>
+            <div className="mt-6">
               <SeperatorWithName text="OR" />
-
               <Button
-                type="button"
-                className="w-full flex items-center justify-center bg-white text-black p-2 rounded mt-4"
+                variant="outline"
+                className="mt-6 w-full"
                 onClick={() => signIn("google")}
               >
-                <FcGoogle className="mr-2" /> Sign up with Google
+                <FcGoogle className="mr-2" />
+                Continue with Google
               </Button>
-
-              <p className="text-center text-sm text-gray-600 dark:text-gray-400 mt-4">
-                Already have an account? <Link href="/login">Login</Link>
-              </p>
-            </form>
-          </Form>
+            </div>
+            <p className="mt-6 text-center text-sm text-muted-foreground">
+              Already have an account?{" "}
+              <Link
+                href="/login"
+                className="font-medium text-primary hover:underline"
+              >
+                Sign in
+              </Link>
+            </p>
+          </div>
         </div>
-      </div>
-    );
-  } else {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
-        <h1 className="text-2xl font-semibold">
-          Welcome, {session.user?.name}
-        </h1>
-        <Button onClick={() => signOut()} className="mt-4">
-          Sign out
-        </Button>
+        <div className="hidden lg:block m-2 ">
+          <div className="relative h-full w-full">
+            <Image
+              src={registerCoverImage}
+              alt="Register cover"
+              layout="fill"
+              objectFit="cover"
+              className="rounded-[10px]"
+            />
+          </div>
+        </div>
       </div>
     );
   }

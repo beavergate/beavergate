@@ -12,12 +12,17 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import registerCoverImage from "assets/container.png";
+import logo from "assets/logo.png";
 import { Input } from "@/components/ui/input";
 import { FcGoogle } from "react-icons/fc";
 import SeperatorWithName from "@/components/SeperatorWithName";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import PasswordInput from "@/components/PasswordInput";
+import { Checkbox } from "@/ui/checkbox";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -59,80 +64,100 @@ const Login: React.FC = () => {
 
   if (!session) {
     return (
-      <div className="flex flex-col justify-center items-center min-h-screen bg-gray-100 dark:bg-gray-900">
-        <div className="w-full max-w-sm">
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="space-y-8 bg-white dark:bg-gray-800 p-6 rounded shadow-md"
-            >
-              <h1 className="text-xl font-semibold text-center mb-4">Login</h1>
-
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="email"
-                        placeholder="you@example.com"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="Your password"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button type="submit" className="w-full">
-                Login
-              </Button>
-
+      <div className="grid min-h-screen lg:grid-cols-2">
+        <div className="px-6 py-12 lg:px-8 xl:px-12">
+          <div className="flex items-center">
+            <Image src={logo} alt="BeaverGate Logo" />
+          </div>
+          <div className="mx-auto mt-[120px] max-w-md">
+            <div className="space-y-2">
+              <h1 className="text-2xl font-semibold tracking-tight">Sign in</h1>
+              <p className="text-sm text-muted-foreground">
+                Please login to continue to your account.
+              </p>
+            </div>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="mt-8 space-y-4"
+              >
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="email"
+                          placeholder="jonas_khanwald@gmail.com"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <PasswordInput placeholder="Password" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <div className="flex items-center space-x-2">
+                  <Checkbox id="keep-logged-in" />
+                  <label
+                    htmlFor="keep-logged-in"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    Keep me logged in
+                  </label>
+                </div>
+                <Button type="submit" className="w-full bg-[#367AFF]">
+                  Sign in
+                </Button>
+              </form>
+            </Form>
+            <div className="mt-6">
               <SeperatorWithName text="OR" />
-
               <Button
-                type="button"
-                className="w-full flex items-center justify-center bg-white text-black p-2 rounded mt-4"
+                variant="outline"
+                className="mt-6 w-full"
                 onClick={() => signIn("google")}
               >
-                <FcGoogle className="mr-2" /> Sign up with Google
+                <FcGoogle className="mr-2" />
+                Sign in with Google
               </Button>
-
-              <p className="text-center text-sm text-gray-600 dark:text-gray-400 mt-4">
-                Dont have an account? <Link href="/register">Register</Link>
-              </p>
-            </form>
-          </Form>
+            </div>
+            <p className="mt-6 text-center text-sm text-muted-foreground">
+              Need an account?{" "}
+              <Link
+                href="/register"
+                className="font-medium text-[#367AFF] hover:underline"
+              >
+                Create one
+              </Link>
+            </p>
+          </div>
         </div>
-      </div>
-    );
-  } else {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
-        <h1 className="text-2xl font-semibold">
-          Welcome, {session.user?.name}
-        </h1>
-        <Button onClick={() => signOut()} className="mt-4">
-          Sign out
-        </Button>
+        <div className="hidden lg:block m-2 ">
+          <div className="relative h-full w-full">
+            <Image
+              src={registerCoverImage}
+              alt="Login cover"
+              layout="fill"
+              objectFit="cover"
+              className="rounded-[10px]"
+            />
+          </div>
+        </div>
       </div>
     );
   }

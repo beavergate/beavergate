@@ -121,6 +121,8 @@ const List: React.FC = () => {
     router.push(`/properties/${data?._id}`);
   };
 
+  console.log("properties", properties);
+
   return (
     <div className="container mx-auto p-0">
       <Table

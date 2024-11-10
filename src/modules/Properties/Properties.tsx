@@ -6,6 +6,7 @@ import Map from "./components/Map";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Session } from "next-auth";
 import FilterBar from "@/components/FilterBar";
+import Grid from "./components/Grid";
 type Status = "all" | "active" | "off-market" | "draft";
 type View = "grid" | "list" | "map";
 type SortOption = "newest" | "oldest";
@@ -42,7 +43,7 @@ const Properties = ({ session }: { session: Session | null }) => {
       />
       {view === "list" && <List />}
       {view === "map" && <Map />}
-      {view === "grid" && <List />}
+      {view === "grid" && <Grid />}
     </div>
   );
 };

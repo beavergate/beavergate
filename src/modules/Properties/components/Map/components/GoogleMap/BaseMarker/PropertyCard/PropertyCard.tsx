@@ -1,5 +1,5 @@
-import { IProperty } from "@/models/Property"
-import { Button } from "@/components/ui/button"
+import { IProperty } from "@/models/Property";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -7,19 +7,19 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Link2 } from "lucide-react"
-import Image from "next/image"
-import { useRouter } from "next/navigation"
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Link2 } from "lucide-react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 type Props = {
-  property: IProperty
-}
+  property: IProperty;
+};
 
 const PropertyCard: React.FC<Props> = ({ property }) => {
-  const router = useRouter()
-  
+  const router = useRouter();
+
   return (
     <Card className="w-[400px] overflow-hidden">
       <div className="relative h-[200px] w-full">
@@ -46,15 +46,19 @@ const PropertyCard: React.FC<Props> = ({ property }) => {
       </CardHeader>
       <CardContent className="space-y-4 p-4 pt-0">
         <div className="flex items-center gap-3">
-          <Badge 
-            variant={property.status.toLowerCase() === 'active' ? 'default' : 'secondary'}
+          <Badge
+            variant={
+              property.status.toLowerCase() === "active"
+                ? "default"
+                : "secondary"
+            }
             className="rounded-md"
           >
             {property.status}
           </Badge>
           <span className="text-sm text-gray-500">Updated Dec 5</span>
-          <Button 
-            variant="link" 
+          <Button
+            variant="link"
             className="ml-auto p-0 text-blue-600 hover:text-blue-800"
             onClick={() => router.push(`/properties/${property._id}`)}
           >
@@ -63,13 +67,17 @@ const PropertyCard: React.FC<Props> = ({ property }) => {
         </div>
 
         <div className="space-y-2 border-t pt-4">
-          <div className="text-sm text-gray-600">01 Jan 2024 - 31 Dec 2029</div>
+          <div className="text-sm text-gray-600 text-center">
+            01 Jan 2024 - 31 Dec 2029
+          </div>
           <div className="grid gap-1">
             <div className="text-sm">
-              <span className="font-medium">Rent:</span> {property.cost_centre || "20,000"} p.m.
+              <span className="font-medium">Rent:</span>{" "}
+              {property.cost_centre || "20,000"} p.m.
             </div>
             <div className="text-sm">
-              <span className="font-medium">Security Deposit:</span> Rs. 1,00,000
+              <span className="font-medium">Security Deposit:</span> Rs.
+              1,00,000
             </div>
             <div className="text-sm">
               <span className="font-medium">Lock In Till:</span> 30 Jun 2024
@@ -84,14 +92,16 @@ const PropertyCard: React.FC<Props> = ({ property }) => {
           className="ml-auto text-blue-600 hover:text-blue-800"
           onClick={() => {
             // Handle link sharing or copying
-            navigator.clipboard.writeText(`${window.location.origin}/properties/${property._id}`)
+            navigator.clipboard.writeText(
+              `${window.location.origin}/properties/${property._id}`
+            );
           }}
         >
           <Link2 className="h-5 w-5" />
         </Button>
       </CardFooter>
     </Card>
-  )
-}
+  );
+};
 
-export default PropertyCard
+export default PropertyCard;

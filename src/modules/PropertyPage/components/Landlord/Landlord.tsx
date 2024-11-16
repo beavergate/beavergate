@@ -47,6 +47,8 @@ const parseLandlords = ([data]: any) => {
   }));
 };
 
+//changes
+
 const Landlord = ({ landlordsData }: { landlordsData: ILandlord[] }) => {
   const router = useRouter();
   const pathname = usePathname();

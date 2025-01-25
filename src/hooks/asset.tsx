@@ -1,3 +1,4 @@
+import { useGlobalState } from "@/context/GlobalStateContext";
 import callApi from "@/lib/api";
 import { useState } from "react";
 
@@ -29,6 +30,9 @@ export const useCreateAsset = () => {
 
 // Hook to fetch all assets
 export const useGetAllAssets = () => {
+  const {
+    actions: { setAssets },
+  } = useGlobalState();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -41,6 +45,7 @@ export const useGetAllAssets = () => {
         method: "GET",
       });
       setLoading(false);
+      setAssets(res.data);
       return res.data; // Return the list of assets
     } catch (err: any) {
       setError(err.message);

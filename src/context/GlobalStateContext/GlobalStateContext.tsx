@@ -9,7 +9,8 @@ import { Action, GlobalStateContextType, State } from "./types";
 const initialState: State = {
   user: { id: null, name: null },
   properties: [],
-  landlords: []
+  landlords: [],
+  assets: [],
   // Initialize other global state variables here
 };
 
@@ -30,6 +31,11 @@ function globalStateReducer(state: State, action: Action): State {
       return {
         ...state,
         landlords: action.payload,
+      };
+    case "SET_ASSETS":
+      return {
+        ...state,
+        assets: action.payload,
       };
     // Add other cases here
     default:
@@ -56,11 +62,15 @@ export const GlobalStateProvider = ({ children }: { children: ReactNode }) => {
   const setLandlords = (landlords: any) => {
     dispatch({ type: "SET_LANDLORDS", payload: landlords });
   };
+  const setAssets = (assets: any) => {
+    dispatch({ type: "SET_ASSETS", payload: assets });
+  };
 
   const actions = {
     setUser,
     setProperties,
     setLandlords,
+    setAssets,
     // Add other actions here
   };
 
